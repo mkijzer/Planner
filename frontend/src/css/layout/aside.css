@@ -1,0 +1,50 @@
+/* ASIDE */
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md);
+}
+
+/* Common section styling */
+.aside section {
+  background: var(--cream);
+  border-radius: 4px;
+  padding: var(--spacing-md);
+}
+
+.aside h3 {
+  font-family: var(--font-accent);
+  color: var(--brown);
+  font-size: var(--text-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Mini calendar specific styles */
+.mini-calendar {
+  font-size: var(--text-xs);
+  /* Will be styled similar to main calendar but smaller */
+}
+
+/* Goals tracker styling */
+.goals-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Quick add form styling */
+.quick-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Inspiration quote styling */
+.daily-quote {
+  font-style: italic;
+  color: var(--brown);
+  padding: var(--spacing-sm);
+  border-left: 3px solid var(--orange);
+}

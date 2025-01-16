@@ -1,0 +1,40 @@
+/* VARIABLES.CSS */
+
+:root {
+  /* Main Colors */
+  --orange: #ee7a00;
+  --brown: #301e1a;
+  --cream: #dfe0df;
+  --gray: #a1756b;
+
+  /* Component Colors */
+  --header-bg: var(--brown);
+  --sidebar-bg: var(--gray);
+  --main-bg: var(--cream);
+  --footer-bg: var(--brown);
+
+  /* Text Colors */
+  --text-light: #ffffff;
+  --text-dark: #333333;
+
+  /* Spacing */
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+
+  /* Font Families */
+  --font-nav: "Quicksand", sans-serif;
+  --font-main: "Roboto Slab", sans-serif;
+  --font-accent: "Fira Sans", sans-serif;
+
+  /* Font Sizes */
+  --text-xs: 0.675rem; /* 10.8px */
+  --text-sm: 0.787rem; /* 12.6px */
+  --text-base: 0.9rem; /* 14.4px */
+  --text-lg: 1rem; /* 16px */
+  --text-xl: 1.125rem; /* 18px */
+  --text-2xl: 1.35rem; /* 21.6px */
+  --text-3xl: 1.8rem; /* 28.8px */
+  --text-4xl: 2.25rem; /* 36px */
+  --text-5xl: 2.7rem; /* 43.2px */
+}

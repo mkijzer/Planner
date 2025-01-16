@@ -1,0 +1,31 @@
+/* MAIN.CSS */
+
+.main-grid {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 60px minmax(0, 1fr) 40px;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  background-color: var(--cream);
+}
+
+.main {
+  grid-area: 2 / 2 / 5 / 6;
+  background: linear-gradient(20deg, var(--cream), var(--gray));
+  opacity: 0.9;
+}
+
+/* FOOTER */
+.footer {
+  grid-area: 5 / 1 / 6 / 6;
+  background-color: var(--gray);
+  color: var(--text-light);
+  opacity: 0.9;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  /* Remove margin if any */
+  margin: 0;
+}

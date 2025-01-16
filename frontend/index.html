@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlannerbyMike</title>
+    <link rel="stylesheet" href="src/css/style.css" />
+    <!-- Font Links separated by lines for clarity -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quattrocento+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Fira+Sans:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Fira+Sans:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="main-grid">
+      <header class="header" role="banner">
+        <div class="header-logo">
+          <h1>Daily Planner</h1>
+        </div>
+        <nav class="header-nav">
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#calendar">Calendar</a></li>
+            <li><a href="#tasks">Tasks</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- ASIDE -->
+      <aside class="aside" role="complementary">
+        <section class="aside-mini-calendar">
+          <h2>Quick Navigation</h2>
+          <div class="mini-calendar">
+            <!-- Mini calendar will be populated by JS -->
+          </div>
+        </section>
+
+        <section class="aside-goals">
+          <h2>Goals Progress</h2>
+          <div class="goals-tracker">
+            <!-- Progress bars/checklist will go here -->
+          </div>
+        </section>
+
+        <section class="aside-quick-add">
+          <h2>Quick Add</h2>
+          <div class="quick-add-form">
+            <!-- Form for quickly adding tasks/events -->
+          </div>
+        </section>
+
+        <section class="aside-inspiration">
+          <h2>Today's Inspiration</h2>
+          <blockquote class="daily-quote">
+            <!-- Daily quote will be populated by JS -->
+          </blockquote>
+        </section>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main" role="main">
+        <div class="month-container">
+          <!-- Month Navigation -->
+          <div class="month-nav">
+            <button class="month-nav-prev" aria-label="Previous month">
+              Previous
+            </button>
+            <h2 class="month-nav-title">January 2024</h2>
+            <button class="month-nav-next" aria-label="Next month">Next</button>
+          </div>
+
+          <!-- Monthly Overview -->
+          <div class="month-overview">
+            <div class="month-overview-goals">
+              <h2>Monthly Goals</h2>
+              <div class="goals-container">
+                <!-- This will be populated by JS -->
+              </div>
+            </div>
+            <div class="month-overview-stats">
+              <h2>Monthly Stats</h2>
+              <div class="stats-container">
+                <!-- This will show completed vs total tasks -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Calendar grid - will be populated by JS -->
+          <div class="calendar-grid-days"></div>
+        </div>
+      </main>
+
+      <!-- Task Modal -->
+      <div
+        class="modal-overlay"
+        id="taskModal"
+        role="dialog"
+        aria-labelledby="modal-heading"
+        aria-hidden="false"
+      >
+        <div class="modal-content">
+          <span class="modal-close" aria-label="Close modal">&times;</span>
+          <h2 id="modal-heading">Tasks for <span id="modal-date"></span></h2>
+
+          <!-- Tasks List View -->
+          <div id="tasks-view">
+            <div id="tasks-list">
+              <ul id="task-list-container">
+                <!-- Tasks will be populated here -->
+              </ul>
+            </div>
+            <button id="show-task-form" class="btn-submit">
+              + Add New Task
+            </button>
+          </div>
+
+          <!-- Add Task Form -->
+          <div id="add-task-form" class="hidden">
+            <form id="task-form">
+              <div class="form-group">
+                <label for="taskTitle">Title:</label>
+                <input type="text" id="taskTitle" required class="task-input" />
+              </div>
+
+              <div class="form-group">
+                <label for="taskTime">Time:</label>
+                <input type="time" id="taskTime" />
+              </div>
+
+              <div class="form-group">
+                <label>Priority:</label>
+                <div class="priority-buttons">
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    data-priority="low"
+                  >
+                    Low
+                  </button>
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    data-priority="medium"
+                  >
+                    Med
+                  </button>
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    data-priority="high"
+                  >
+                    High
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="taskCategory">Category:</label>
+                <div class="tag-container">
+                  <input type="text" id="taskCategory" class="tag-input" />
+                  <div id="selectedTags" class="selected-tags"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Reminder:</label>
+                <div class="reminder-buttons">
+                  <button type="button" class="reminder-btn" data-time="15">
+                    15 min
+                  </button>
+                  <button type="button" class="reminder-btn" data-time="60">
+                    1 hour
+                  </button>
+                  <button type="button" class="reminder-btn" data-time="1440">
+                    1 day
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="taskNotes">Notes:</label>
+                <textarea id="taskNotes" class="task-notes" rows="3"></textarea>
+              </div>
+
+              <button type="submit" class="btn-submit">Add Task</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer" role="contentinfo">footer</footer>
+    </div>
+    <script type="module" src="src/js/main.js"></script>
+  </body>
+</html>

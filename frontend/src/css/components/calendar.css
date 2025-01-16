@@ -1,0 +1,369 @@
+/* CALENDER.CSS */
+
+/* MONTHLY OVERVIEW */
+.month-overview {
+  display: flex;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.month-overview-goals,
+.month-overview-stats {
+  flex: 1;
+  background-color: var(--cream);
+  padding: var(--spacing-md);
+  border-radius: 4px;
+}
+
+/* Headers for overview sections */
+.month-overview h2 {
+  font-family: var(--font-accent);
+  color: var(--brown);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--text-lg);
+}
+
+.month-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Month navigation section styling */
+.month-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) 0;
+}
+
+/* Month title styling */
+.month-nav-title {
+  font-family: var(--font-accent);
+  font-size: var(--text-2xl);
+  color: var(--brown);
+  margin: 0; /* Override default h2 margin */
+}
+
+/* Navigation buttons styling */
+.month-nav-prev,
+.month-nav-next {
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-left: 1rem;
+  margin-right: 1rem;
+  background: var(--brown);
+  color: var(--text-light);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+/* Button hover effect */
+.month-nav-prev:hover,
+.month-nav-next:hover {
+  opacity: 0.9;
+}
+
+/* Calendar grid container */
+.calendar-grid {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Fill available space */
+  gap: var(--spacing-md);
+}
+
+/* Days of week header */
+.calendar-grid-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 700;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--gray);
+}
+
+/* Calendar days grid */
+.calendar-grid-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--spacing-sm);
+  flex: 1; /* Take remaining space */
+}
+/* Individual calendar day cell */
+.calendar-day {
+  background: var(--cream);
+  padding: var(--spacing-sm);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  transition: background-color 0.3s ease;
+}
+
+/* Header section of each day */
+.calendar-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.day-number {
+  font-weight: bold;
+  font-size: var(--text-lg);
+  color: var(--brown);
+}
+
+/* Content area for each day */
+.calendar-day-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.task-preview,
+.event-preview {
+  padding: 2px;
+  margin: 2px;
+  font-size: var(--text-xs);
+  color: var(--text-dark);
+}
+
+.calendar-day-content .task-preview {
+  padding: 2px;
+  margin: 2px;
+  font-size: var(--text-xs);
+  color: var(--brown);
+}
+
+/* States for calendar days */
+.calendar-day--current {
+  border: 2px solid var(--orange);
+}
+
+.calendar-day--has-events::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background-color: var(--orange);
+  border-radius: 50%;
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+}
+
+/* Hover state */
+.calendar-day:hover {
+  background: var(--gray);
+  cursor: pointer;
+}
+
+/* Add these new styles to your calendar.css file */
+
+.calendar-grid-days {
+  display: grid;
+  grid-template-columns: auto repeat(7, 1fr);
+  gap: 1px;
+  background-color: var(--gray);
+  padding: 1px;
+  height: calc(100vh - 300px);
+  min-height: 600px;
+}
+
+.time-column {
+  background-color: var(--cream);
+  padding: var(--spacing-sm);
+  border-right: 2px solid var(--gray);
+}
+
+.time-slot {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: var(--spacing-sm);
+  color: var(--brown);
+  font-weight: bold;
+  font-size: var(--text-sm);
+}
+
+.day-column {
+  background-color: var(--cream);
+  display: flex;
+  flex-direction: column;
+}
+
+.day-header {
+  background-color: var(--brown);
+  color: var(--text-light);
+  padding: var(--spacing-sm);
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid var(--gray);
+}
+
+.time-cell {
+  height: 60px;
+  border-bottom: 1px solid var(--gray);
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  overflow-y: auto;
+}
+
+.time-cell:hover {
+  background-color: rgba(161, 117, 107, 0.1);
+}
+
+.current-day .day-header {
+  background-color: var(--orange);
+}
+
+.task-preview {
+  background-color: var(--orange);
+  color: var(--text-light);
+  padding: 2px 4px;
+  margin: 2px 0;
+  border-radius: 2px;
+  font-size: var(--text-xs);
+}
+
+/* Adjust the month navigation for week view */
+.month-nav-title {
+  font-size: var(--text-lg);
+}
+
+/* Make sure the calendar grid takes up available space */
+.calendar-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Add these styles to your CSS */
+
+/* Main grid container */
+.main-grid {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 250px 1fr;
+  grid-template-areas:
+    "header header"
+    "aside main"
+    "footer footer";
+}
+
+.header {
+  grid-area: header;
+}
+
+.aside {
+  grid-area: aside;
+}
+
+.main {
+  grid-area: main;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  grid-area: footer;
+  background-color: var(--footer-bg);
+  color: var(--text-light);
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+/* Calendar specific fixes */
+.calendar-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.calendar-grid-days {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Ensure time slots are all same height */
+.time-slot,
+.time-cell {
+  height: 60px;
+  min-height: 60px;
+}
+
+/* Task preview in calendar */
+.task-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--orange);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  font-size: 11px;
+}
+
+.task-preview > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-time {
+  font-size: 10px;
+  opacity: 0.9;
+}
+
+/* Task list in modal */
+.task-list-item {
+  background: var(--cream);
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.task-header h3 {
+  margin: 0;
+  color: var(--brown);
+}
+
+.task-details {
+  font-size: 14px;
+}
+
+.task-details p {
+  margin: var(--spacing-sm) 0;
+}
+
+.task-preview-priority {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.task-preview-priority.low {
+  background: #4caf50;
+}
+.task-preview-priority.medium {
+  background: #ff9800;
+}
+.task-preview-priority.high {
+  background: #f44336;
+}

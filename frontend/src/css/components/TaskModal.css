@@ -1,0 +1,247 @@
+/* TASKMODAL.CSS */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none; /* Changed from visibility: hidden */
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-overlay.show {
+  display: flex; /* Changed from visibility: visible */
+}
+
+.modal-content {
+  background-color: var(--cream);
+  padding: var(--spacing-lg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content h2 {
+  font-size: var(--text-2xl); /* Consistent size for the modal title */
+}
+
+.modal-close {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  font-size: var(--text-xl);
+  color: var(--brown);
+  cursor: pointer;
+}
+
+#task-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.form-group label {
+  font-weight: 700;
+  color: var(--brown);
+}
+
+.form-group input {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  font-size: var(--text-base);
+}
+
+.btn-submit {
+  background-color: var(--brown);
+  color: var(--text-light);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 4px;
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.btn-submit:hover {
+  opacity: 0.9;
+}
+
+#tasks-list {
+  margin-bottom: var(--spacing-lg);
+}
+
+#task-list-container {
+  list-style-type: none;
+  padding: 0;
+}
+
+#task-list-container li {
+  margin-bottom: var(--spacing-sm);
+}
+
+#add-task-section {
+  margin-top: var(--spacing-lg);
+}
+
+#taskTitle {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  width: 100%;
+}
+
+#taskTime {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+#show-task-form {
+  margin-top: var(--spacing-md);
+  width: 100%;
+}
+
+/* Priority Buttons */
+.priority-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.priority-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--gray);
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.priority-btn.selected {
+  color: white;
+}
+
+.priority-btn[data-priority="low"].selected {
+  background: #4caf50;
+  border-color: #4caf50;
+}
+
+.priority-btn[data-priority="medium"].selected {
+  background: #ff9800;
+  border-color: #ff9800;
+}
+
+.priority-btn[data-priority="high"].selected {
+  background: #f44336;
+  border-color: #f44336;
+}
+
+/* Tags */
+.tag-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tag {
+  background: var(--brown);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tag-remove {
+  cursor: pointer;
+}
+
+/* Reminder Buttons */
+.reminder-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.reminder-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--gray);
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reminder-btn.selected {
+  background: var(--brown);
+  color: white;
+}
+
+/* Notes Textarea */
+.task-notes {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  resize: vertical;
+}
+
+/* Task Preview in Calendar */
+.task-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.task-preview-priority {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.task-preview-priority.low {
+  background: #4caf50;
+}
+.task-preview-priority.medium {
+  background: #ff9800;
+}
+.task-preview-priority.high {
+  background: #f44336;
+}
+
+.priority-btn.selected,
+.reminder-btn.selected {
+  background-color: #007bff;
+  color: white;
+}
