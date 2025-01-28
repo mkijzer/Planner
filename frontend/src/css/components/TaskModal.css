@@ -245,3 +245,28 @@
   background-color: #007bff;
   color: white;
 }
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-task,
+.delete-task {
+  padding: 4px 8px;
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-task {
+  background: #f44336;
+  color: white;
+  border: none;
+}
