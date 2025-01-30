@@ -1,0 +1,62 @@
+/* src/css/components/task-list.css */
+
+/* Task container */
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Individual task */
+.sidebar-task-preview {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--gray);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-task-preview:hover {
+  background-color: var(--cream);
+}
+
+/* Task header (date and time) */
+.task-header {
+  display: flex;
+  gap: var(--spacing-sm);
+  color: var(--brown);
+  font-size: var(--text-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.task-date {
+  font-weight: bold;
+}
+
+/* Task title */
+.task-title {
+  color: var(--brown);
+  font-size: var(--text-base);
+  margin: 0;
+  padding-bottom: var(--spacing-sm);
+}
+
+/* Priority indicators */
+.task-preview-priority {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.task-preview-priority.low {
+  background: #4caf50;
+}
+
+.task-preview-priority.medium {
+  background: var(--orange);
+}
+
+.task-preview-priority.high {
+  background: #f44336;
+}

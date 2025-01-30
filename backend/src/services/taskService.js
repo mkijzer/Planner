@@ -1,18 +1,54 @@
+// src/services/taskService.js
 import { PrismaClient } from "@prisma/client";
-
 const prisma = new PrismaClient();
 
 export const taskService = {
   async getAllTasks() {
-    return await prisma.task.findMany();
+    const tasks = await prisma.task.findMany();
+    // Convert stored JSON string back to array
+    return tasks.map((task) => ({
+      ...task,
+      tags: task.tags ? JSON.parse(task.tags) : [],
+    }));
   },
 
   async createTask(data) {
-    // if (!data.title) {
-    //   throw new Error("Title is required");
-    // }
-    console.log("Creating task with data:", data); // Add this line to log the data
-    return await prisma.task.create({ data });
+    console.log("Creating task with data:", data);
+
+    // Convert frontend data to database schema
+    const taskData = {
+      title: data.title,
+      date: new Date(data.date),
+      description: data.notes || "", // Map notes to description
+      priority: data.priority,
+      status: data.status || "TODO",
+      reminder: data.reminder,
+      tags: data.tags ? JSON.stringify(data.tags) : null,
+    };
+
+    return await prisma.task.create({ data: taskData });
+  },
+
+  async updateTask(id, data) {
+    const existingTask = await prisma.task.findUnique({ where: { id } });
+    if (!existingTask) {
+      throw new Error("Task not found");
+    }
+
+    const taskData = {
+      title: data.title,
+      date: new Date(data.date),
+      description: data.notes || "",
+      priority: data.priority,
+      status: data.status || "TODO",
+      reminder: data.reminder,
+      tags: data.tags ? JSON.stringify(data.tags) : null,
+    };
+
+    return await prisma.task.update({
+      where: { id },
+      data: taskData,
+    });
   },
 
   async getTaskById(id) {
@@ -20,24 +56,10 @@ export const taskService = {
     if (!task) {
       throw new Error("Task not found");
     }
-    return task;
-  },
-
-  async updateTask(id, data) {
-    // First, check if the task exists
-    const existingTask = await prisma.task.findUnique({ where: { id } });
-
-    if (!existingTask) {
-      throw new Error("Task not found");
-    }
-
-    // If task exists, proceed with update
-    const task = await prisma.task.update({
-      where: { id },
-      data,
-    });
-
-    return task;
+    return {
+      ...task,
+      tags: task.tags ? JSON.parse(task.tags) : [],
+    };
   },
 
   async deleteTask(id) {

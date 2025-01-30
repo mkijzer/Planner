@@ -9,16 +9,28 @@ class TaskManager {
     this.taskService = taskService;
   }
 
-  addTask(taskData) {
-    this.taskService.addTask(taskData);
+  async addTask(taskData) {
+    try {
+      await this.taskService.addTask(taskData);
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
   }
 
-  editTask(taskData) {
-    this.taskService.editTask(taskData);
+  async editTask(taskData) {
+    try {
+      await this.taskService.editTask(taskData);
+    } catch (error) {
+      console.error("Error editing task:", error);
+    }
   }
 
-  deleteTask(taskId) {
-    this.taskService.deleteTask(taskId);
+  async deleteTask(taskId) {
+    try {
+      await this.taskService.deleteTask(taskId);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
   }
 }
 
@@ -27,13 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const taskManager = new TaskManager(taskService);
 
   const calendarContainer = document.querySelector(".month-container");
-  if (!calendarContainer) {
-    console.error("Calendar container not found");
-    return;
-  }
+  const todayTasksContainer = document.querySelector(".today-tasks");
 
-  const tasksListContainer = document.querySelector(".aside-today");
-  const taskList = new TaskList(tasksListContainer, taskService);
+  // Initialize components
+  const taskList = new TaskList(todayTasksContainer, taskService);
   const calendar = new Calendar(calendarContainer, taskService);
   const taskModal = new TaskModal(taskManager);
 

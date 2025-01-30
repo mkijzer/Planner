@@ -10,6 +10,26 @@ export class TaskModal {
     this.initialize();
   }
 
+  async handleSubmit(event) {
+    event.preventDefault();
+    const taskData = {
+      title: document.getElementById("taskTitle").value,
+      description: document.getElementById("taskNotes").value,
+      // Add other fields as needed
+    };
+
+    try {
+      await this.taskManager.addTask(taskData);
+      // Refresh the task list
+      const taskList = new TaskList(
+        document.querySelector(".today-tasks"),
+        this.taskManager.taskService
+      );
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
+  }
+
   initialize() {
     this.setupEventListeners();
     this.setupFormHandlers();

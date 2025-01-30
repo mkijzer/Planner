@@ -1,4 +1,3 @@
-
 const DAYS = {
   0: "Sun",
   1: "Mon",
@@ -86,4 +85,14 @@ export function formatTime(date) {
   const period = hours >= 12 ? "PM" : "AM";
   const displayHours = hours % 12 || 12;
   return `${displayHours}:${minutes.toString().padStart(2, "0")} ${period}`;
+}
+
+// Add to your existing DateUtils.js
+export function formatDateForDB(date) {
+  const dateObj = new Date(date);
+  return dateObj.toISOString();
+}
+
+export function formatDateFromDB(dateString) {
+  return new Date(dateString);
 }

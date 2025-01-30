@@ -61,86 +61,7 @@
   gap: var(--spacing-sm);
 }
 
-/* Task preview in sidebar */
-.sidebar-task-preview {
-  padding: var(--spacing-sm);
-  background-color: var(--orange);
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.sidebar-task-preview:hover {
-  background-color: var(--gray);
-}
-
-.sidebar-task-preview h4 {
-  margin: 0;
-  font-size: var(--text-base);
-  color: var(--brown);
-}
-
-.sidebar-task-preview time {
-  font-size: var(--text-sm);
-  color: var(--brown);
-  margin-top: 2px;
-}
-
-/* Task priority indicators in sidebar */
-.sidebar-task-preview .task-preview-priority {
-  margin-left: auto;
-  margin-right: 0;
-}
-
 /* Add these styles to aside.css */
-
-/* Task list container */
-.task-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-/* Individual task item */
-.task-list-item {
-  background: white;
-  border-radius: 4px;
-  padding: var(--spacing-sm);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-/* Task title */
-.task-list-item h4 {
-  color: var(--brown);
-  font-size: var(--text-base);
-  margin: 0;
-}
-
-/* Task metadata */
-.task-list-item .task-meta {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-sm);
-  font-size: var(--text-sm);
-  color: var(--gray);
-}
-
-/* Task actions */
-.task-list-item .task-actions {
-  display: flex;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-sm);
-}
-
-.task-list-item .edit-task,
-.task-list-item .delete-task {
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: var(--text-xs);
-  cursor: pointer;
-}
 
 .task-list-item .edit-task {
   background: var(--cream);
@@ -152,16 +73,6 @@
   background: #f44336;
   border: none;
   color: white;
-}
-
-.sidebar-task-preview {
-  background-color: var(--orange);
-  color: white;
-  transition: background-color 0.2s;
-}
-
-.sidebar-task-preview:hover {
-  background-color: var(--brown);
 }
 
 .task-filters {

@@ -14,3 +14,8 @@ app.use("/api/tasks", taskRoutes);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server: ${port}`));
+
+// backend/index.js
+app.get("/api/test", (req, res) => {
+  res.json({ message: "API is working" });
+});

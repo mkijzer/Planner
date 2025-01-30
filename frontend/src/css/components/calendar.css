@@ -43,7 +43,7 @@
   font-family: var(--font-accent);
   font-size: var(--text-2xl);
   color: var(--brown);
-  margin: 0; /* Override default h2 margin */
+  margin: 0;
 }
 
 /* Navigation buttons styling */
@@ -70,98 +70,11 @@
 .calendar-grid {
   display: flex;
   flex-direction: column;
-  height: 100%; /* Fill available space */
+  height: 100%;
   gap: var(--spacing-md);
 }
 
-/* Days of week header */
-.calendar-grid-header {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  font-weight: 700;
-  padding: var(--spacing-sm) 0;
-  border-bottom: 1px solid var(--gray);
-}
-
 /* Calendar days grid */
-.calendar-grid-days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: var(--spacing-sm);
-  flex: 1; /* Take remaining space */
-}
-/* Individual calendar day cell */
-.calendar-day {
-  background: var(--cream);
-  padding: var(--spacing-sm);
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  transition: background-color 0.3s ease;
-}
-
-/* Header section of each day */
-.calendar-day-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.day-number {
-  font-weight: bold;
-  font-size: var(--text-lg);
-  color: var(--brown);
-}
-
-/* Content area for each day */
-.calendar-day-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.task-preview,
-.event-preview {
-  padding: 2px;
-  margin: 2px;
-  font-size: var(--text-xs);
-  color: var(--text-dark);
-}
-
-.calendar-day-content .task-preview {
-  padding: 2px;
-  margin: 2px;
-  font-size: var(--text-xs);
-  color: var(--brown);
-}
-
-/* States for calendar days */
-.calendar-day--current {
-  border: 2px solid var(--orange);
-}
-
-.calendar-day--has-events::after {
-  content: "";
-  width: 6px;
-  height: 6px;
-  background-color: var(--orange);
-  border-radius: 50%;
-  position: absolute;
-  top: var(--spacing-sm);
-  right: var(--spacing-sm);
-}
-
-/* Hover state */
-.calendar-day:hover {
-  background: var(--gray);
-  cursor: pointer;
-}
-
-/* Add these new styles to your calendar.css file */
-
 .calendar-grid-days {
   display: grid;
   grid-template-columns: auto repeat(7, 1fr);
@@ -170,6 +83,9 @@
   padding: 1px;
   height: calc(100vh - 300px);
   min-height: 600px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .time-column {
@@ -180,6 +96,7 @@
 
 .time-slot {
   height: 60px;
+  min-height: 60px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -209,6 +126,7 @@
 
 .time-cell {
   height: 60px;
+  min-height: 60px;
   border-bottom: 1px solid var(--gray);
   padding: var(--spacing-sm);
   cursor: pointer;
@@ -223,34 +141,96 @@
   background-color: var(--orange);
 }
 
-.task-preview {
+/* Calendar grid task styles */
+.calendar-grid-days .time-cell {
+  height: 60px;
+  min-height: 60px;
+  border-bottom: 1px solid var(--gray);
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* Base task preview styles */
+.calendar-grid-days .task-preview {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: var(--orange);
   color: white;
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-bottom: 2px;
   font-size: 11px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* Adjust the month navigation for week view */
-.month-nav-title {
-  font-size: var(--text-lg);
+/* Past tasks - faded and smaller */
+.calendar-grid-days .task-preview.task-past {
+  opacity: 0.6;
+  transform: scale(0.95);
+  background-color: var(--orange);
+  filter: saturate(70%);
 }
 
-/* Make sure the calendar grid takes up available space */
-.calendar-grid {
-  flex: 1;
+/* Current tasks (next few hours) - bold and larger */
+.calendar-grid-days .task-preview.task-current {
+  transform: scale(1.05);
+  font-weight: bold;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+/* Future tasks - lighter and normal size */
+.calendar-grid-days .task-preview.task-future {
+  background-color: var(--orange);
+  opacity: 0.85;
+}
+
+.calendar-grid-days .task-content {
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  flex: 1;
+  min-width: 0;
 }
 
-/* Add these styles to your CSS */
+.calendar-grid-days .task-preview-priority {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
 
-/* Main grid container */
+.calendar-grid-days .task-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: normal;
+  color: white;
+  flex-grow: 1;
+}
+
+.calendar-grid-days .task-time {
+  font-size: 10px;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+/* Priority colors */
+.calendar-grid-days .task-preview-priority.low {
+  background: #4caf50;
+}
+.calendar-grid-days .task-preview-priority.medium {
+  background: #ff9800;
+}
+.calendar-grid-days .task-preview-priority.high {
+  background: #f44336;
+}
+
+/* Main grid layout */
 .main-grid {
   min-height: 100vh;
   display: grid;
@@ -291,107 +271,4 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-.calendar-grid-days {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-}
-
-/* Ensure time slots are all same height */
-.time-slot,
-.time-cell {
-  height: 60px;
-  min-height: 60px;
-}
-
-/* Task preview in calendar */
-.task-preview {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--orange);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-bottom: 2px;
-  font-size: 11px;
-}
-
-.task-content {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.task-preview-priority {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-left: 8px;
-  flex-shrink: 0;
-}
-
-.task-preview > div {
-  display: flex;
-  flex-direction: column;
-}
-
-.task-time {
-  font-size: 10px;
-  opacity: 0.9;
-}
-
-.task-title {
-  margin: 0;
-  font-size: 11px;
-  font-weight: normal;
-}
-
-/* Task list in modal */
-.task-list-item {
-  background: var(--cream);
-  border: 1px solid var(--gray);
-  border-radius: 4px;
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
-}
-
-.task-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-sm);
-}
-
-.task-header h3 {
-  margin: 0;
-  color: var(--brown);
-}
-
-.task-details {
-  font-size: 14px;
-}
-
-.task-details p {
-  margin: var(--spacing-sm) 0;
-}
-
-.task-preview-priority {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-left: 8px;
-  flex-shrink: 0;
-}
-
-.task-preview-priority.low {
-  background: #4caf50;
-}
-.task-preview-priority.medium {
-  background: #ff9800;
-}
-.task-preview-priority.high {
-  background: #f44336;
 }

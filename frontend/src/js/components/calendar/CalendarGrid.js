@@ -13,14 +13,51 @@ export class CalendarGrid extends Component {
     this.taskService = taskService;
     this.timeSlots = generateTimeSlots();
     this.currentWeekStart = null;
+    this.scrollTimeout = null;
+    this.isAutoScrolling = false;
+    this.isModalOpen = false;
+
+    // Setup global event listeners once
+    this.setupGlobalEventListeners();
   }
 
   setState(newState) {
     super.setState(newState);
     if (newState.currentWeekStart) {
-      this.currentWeekStart = new Date(newState.currentWeekStart); // Ensure proper date object
-      this.render(); // Make sure render is called
+      this.currentWeekStart = new Date(newState.currentWeekStart);
+      this.render();
     }
+  }
+
+  setupGlobalEventListeners() {
+    // Modal state listeners
+    document.addEventListener("openTaskModal", () => {
+      this.isModalOpen = true;
+      // Clear any pending scroll timeouts when modal opens
+      if (this.scrollTimeout) {
+        clearTimeout(this.scrollTimeout);
+      }
+    });
+
+    document.addEventListener("closeTaskModal", () => {
+      this.isModalOpen = false;
+      // Start the scroll timeout again after modal closes
+      this.startScrollTimeout();
+    });
+
+    document.addEventListener("taskSaved", () => {
+      this.isModalOpen = false;
+      setTimeout(() => {
+        this.scrollToCurrentTime();
+      }, 500);
+    });
+
+    document.addEventListener("taskDeleted", () => {
+      this.isModalOpen = false;
+      setTimeout(() => {
+        this.scrollToCurrentTime();
+      }, 500);
+    });
   }
 
   render() {
@@ -41,14 +78,44 @@ export class CalendarGrid extends Component {
       const dayNum = currentDate.getDate();
 
       calendarHTML += `
-        <div class="day-column ${isToday(currentDate) ? "current-day" : ""}">
-          <div class="day-header">${dayName} ${dayNum}</div>
-          ${this.generateTimeSlotCells(currentDate)}
-        </div>
-      `;
+                <div class="day-column ${
+                  isToday(currentDate) ? "current-day" : ""
+                }">
+                    <div class="day-header">${dayName} ${dayNum}</div>
+                    ${this.generateTimeSlotCells(currentDate)}
+                </div>
+            `;
     }
 
     this.container.innerHTML = calendarHTML;
+
+    // Setup scroll behavior after rendering
+    this.setupScrollListener();
+    if (!this.isModalOpen) {
+      setTimeout(() => {
+        this.scrollToCurrentTime();
+      }, 100);
+    }
+  }
+
+  startScrollTimeout() {
+    if (this.scrollTimeout) {
+      clearTimeout(this.scrollTimeout);
+    }
+
+    if (!this.isAutoScrolling && !this.isModalOpen) {
+      this.scrollTimeout = setTimeout(() => {
+        this.scrollToCurrentTime();
+      }, 2000);
+    }
+  }
+
+  setupScrollListener() {
+    this.container.addEventListener("scroll", () => {
+      if (!this.isModalOpen) {
+        this.startScrollTimeout();
+      }
+    });
   }
 
   setupEventListeners() {
@@ -70,22 +137,58 @@ export class CalendarGrid extends Component {
     });
   }
 
+  scrollToCurrentTime() {
+    this.isAutoScrolling = true;
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    // Find the current time slot in the current day column
+    const todayColumn = this.container.querySelector(".current-day");
+    if (todayColumn) {
+      const timeSlot = todayColumn.querySelector(
+        `[data-hour="${currentHour}"]`
+      );
+      if (timeSlot) {
+        timeSlot.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }
+
+    // Reset flag after scrolling
+    setTimeout(() => {
+      this.isAutoScrolling = false;
+    }, 1000);
+  }
+
   generateTaskPreview(task) {
     const taskDate = new Date(task.date);
+    const now = new Date();
+
+    // Determine task timing
+    let taskTiming = "future";
+    if (taskDate < now) {
+      taskTiming = "past";
+    } else if (taskDate <= new Date(now.getTime() + 3 * 3600000)) {
+      // Next 3 hours
+      taskTiming = "current";
+    }
+
     return `
-      <article class="task-preview" 
-           data-task-id="${task.id}"
-           data-task='${JSON.stringify(task)}'>
-          <div class="task-content">
-            <h4 class="task-title">${task.title}</h4>
-            <time class="task-time" datetime="${taskDate.toISOString()}">
-              ${formatTime(task.date)}
-            </time>
-          </div>
-          <div class="task-preview-priority ${task.priority}" 
-               aria-label="Priority: ${task.priority}">
-          </div>
-      </article>
+        <article class="task-preview ${taskTiming}" 
+                data-task-id="${task.id}" 
+                data-task='${JSON.stringify(task)}'>
+            <div class="task-content">
+                <div class="task-title">${task.title}</div>
+                <time class="task-time" datetime="${taskDate.toISOString()}">
+                    ${formatTime(task.date)}
+                </time>
+            </div>
+            <div class="task-preview-priority ${task.priority}" 
+                 aria-label="Priority: ${task.priority}">
+            </div>
+        </article>
     `;
   }
 
@@ -106,10 +209,10 @@ export class CalendarGrid extends Component {
           .join("");
 
         return `
-          <div class="time-cell" data-date="${cellDate.toISOString()}" data-hour="${hour}">
-            ${taskHTML}
-          </div>
-        `;
+                    <div class="time-cell" data-date="${cellDate.toISOString()}" data-hour="${hour}">
+                        ${taskHTML}
+                    </div>
+                `;
       })
       .join("");
   }

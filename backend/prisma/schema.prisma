@@ -14,10 +14,14 @@ datasource db {
 }
 
 model Task {
-  id          String   @id @default(uuid())
-  title       String?
-  description String?
-  status      String   @default("TODO")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String    @id @default(uuid())
+  title       String    // Required now
+  date        DateTime  // Required for scheduling
+  description String?   // Optional
+  priority    String?   // Optional
+  status      String    @default("TODO")
+  reminder    String?   // Optional
+  tags        String?   // Optional, stored as JSON string
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

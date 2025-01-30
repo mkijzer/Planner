@@ -1,93 +1,84 @@
-// src/js/components/tasks/TaskList.js
 import { Component } from "../Component.js";
 
 export class TaskList extends Component {
   constructor(container, taskService) {
-    super(container, {
+    const initialState = {
       tasks: [],
       filter: "today",
-    });
+    };
+
+    super(container, initialState);
+
+    if (!taskService) {
+      throw new Error("TaskService is required");
+    }
     this.taskService = taskService;
+
     this.unsubscribe = this.taskService.addListener((tasks) => {
       this.setState({ tasks });
     });
+
+    this.initialize();
+  }
+
+  async loadTasks() {
+    try {
+      const tasks = await this.taskService.getAllTasks();
+      switch (this.state.filter) {
+        case "today":
+          this.renderTasks(this.filterTasks(tasks));
+          break;
+        case "upcoming":
+          this.renderTasks(this.filterTasks(tasks));
+          break;
+        case "all":
+          this.renderTasks(tasks);
+          break;
+      }
+    } catch (error) {
+      console.error("Error loading tasks:", error);
+    }
+  }
+
+  renderTasks(tasks) {
+    const tasksList = document.createElement("div");
+    tasksList.className = "tasks-list";
+
+    tasks.forEach((task) => {
+      const taskElement = this.createTaskElement(task);
+      tasksList.appendChild(taskElement);
+    });
+
+    this.container.innerHTML = "";
+    this.container.appendChild(tasksList);
   }
 
   initialize() {
-    if (!this.container.querySelector(".tasks-list")) {
-      this.container.innerHTML = `
-       <div class="task-filters">
-         <button class="task-filter-btn active" data-filter="today">Today</button>
-         <button class="task-filter-btn" data-filter="upcoming">Upcoming</button>
-         <button class="task-filter-btn" data-filter="all">All Tasks</button>
-       </div>
-       <div class="tasks-list"></div>
-     `;
-    }
     this.setupFilterButtons();
-    this.render();
+    this.loadTasks();
   }
 
-  setupEventListeners() {
-    const filterButtons = this.container.querySelectorAll(".task-filter-btn");
+  setupFilterButtons() {
+    const filterButtons = document.querySelectorAll(".task-filter-btn");
     filterButtons.forEach((button) => {
       button.addEventListener("click", () => {
         filterButtons.forEach((btn) => btn.classList.remove("active"));
         button.classList.add("active");
         this.setState({ filter: button.dataset.filter });
-      });
-    });
-
-    this.container
-      .querySelectorAll(".sidebar-task-preview")
-      .forEach((taskEl) => {
-        taskEl.addEventListener("click", () => {
-          const taskId = taskEl.dataset.taskId;
-          const task = this.state.tasks.find((t) => t.id === taskId);
-          if (task) {
-            document.dispatchEvent(
-              new CustomEvent("openTaskDetails", {
-                detail: { task },
-              })
-            );
-          }
-        });
-      });
-  }
-
-  setupFilterButtons() {
-    const filterButtons = this.container.querySelectorAll(".task-filter-btn");
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        filterButtons.forEach((btn) => btn.classList.remove("active"));
-        button.classList.add("active");
-        this.setState({
-          filter: button.dataset.filter,
-        });
+        this.loadTasks();
       });
     });
   }
 
   render() {
-    const tasksContainer = this.container.querySelector(".tasks-list");
-    if (!tasksContainer) return;
-
     const filteredTasks = this.filterTasks(this.state.tasks);
-    tasksContainer.innerHTML = "";
 
     if (filteredTasks.length === 0) {
-      tasksContainer.innerHTML = '<p class="no-tasks">No tasks found.</p>';
+      this.container.innerHTML = '<p class="no-tasks">No tasks found.</p>';
       return;
     }
 
-    const sortedTasks = filteredTasks.sort(
-      (a, b) => new Date(a.date) - new Date(b.date)
-    );
-
-    sortedTasks.forEach((task) => {
-      const taskElement = this.createTaskElement(task);
-      tasksContainer.appendChild(taskElement);
-    });
+    this.renderTasks(filteredTasks);
   }
 
   filterTasks(tasks) {
@@ -111,25 +102,39 @@ export class TaskList extends Component {
           return taskDate > today;
         });
 
-      default: // 'all'
+      default:
         return tasks;
     }
   }
 
   createTaskElement(task) {
     const taskElement = this.createElementFromHTML(`
-     <div class="sidebar-task-preview" data-task-id="${task.id}">
-       <h4>${task.title}</h4>
-       <time>${new Date(task.date).toLocaleTimeString("en-US", {
-         hour: "numeric",
-         minute: "2-digit",
-         hour12: true,
-       })}</time>
-       <div class="task-preview-priority ${task.priority}" 
-            aria-label="Priority: ${task.priority}">
-       </div>
-     </div>
-   `);
+        <div class="sidebar-task-preview" data-task-id="${task.id}">
+            <div class="task-header">
+                ${
+                  this.state.filter !== "today"
+                    ? `
+                    <div class="task-date">
+                        ${new Date(task.date).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                    </div>
+                `
+                    : ""
+                }
+                <time>${new Date(task.date).toLocaleTimeString("en-US", {
+                  hour: "numeric",
+                  minute: "2-digit",
+                  hour12: true,
+                })}</time>
+            </div>
+            <h4 class="task-title">${task.title}</h4>
+            <div class="task-preview-priority ${task.priority}" 
+                 aria-label="Priority: ${task.priority}">
+            </div>
+        </div>
+    `);
 
     taskElement.addEventListener("click", () => {
       document.dispatchEvent(
