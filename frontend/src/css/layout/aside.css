@@ -2,15 +2,22 @@
 .aside {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-md);
+  padding: 0;
+  margin-bottom: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  gap: var(--spacing-md);
 }
 
 /* Common section styling */
 .aside section {
   background: var(--cream);
-  border-radius: 4px;
-  padding: var(--spacing-md);
+  border-radius: var(--neu-radius);
+  padding: var(--neu-padding);
+  margin-bottom: var(--spacing-sm);
+  box-shadow: var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
 }
 
 .aside h2 {
@@ -23,6 +30,12 @@
 /* Mini calendar specific styles */
 .mini-calendar {
   font-size: var(--text-xs);
+  background: var(--cream);
+  border: none;
+  box-shadow: inset var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    inset calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
 }
 
 /* Goals tracker styling */
@@ -78,19 +91,34 @@
 .task-filters {
   margin-bottom: var(--spacing-md);
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
 }
-
 .task-filter-btn {
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--neu-radius);
   background: var(--cream);
-  border: 1px solid var(--brown);
+  border: none;
   color: var(--brown);
   cursor: pointer;
+  font-weight: bold;
+  /* Popped out effect */
+  box-shadow: var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
+  transition: all 0.3s ease;
 }
 
+/* Active state - pushed in look */
 .task-filter-btn.active {
-  background: var(--brown);
-  color: white;
+  box-shadow: inset var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    inset calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
+  transform: scale(0.95);
+}
+
+/* Hover state */
+.task-filter-btn:hover:not(.active) {
+  transform: translateY(-2px);
 }

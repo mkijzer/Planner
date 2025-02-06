@@ -109,31 +109,19 @@ export class TaskList extends Component {
 
   createTaskElement(task) {
     const taskElement = this.createElementFromHTML(`
-        <div class="sidebar-task-preview" data-task-id="${task.id}">
-            <div class="task-header">
-                ${
-                  this.state.filter !== "today"
-                    ? `
-                    <div class="task-date">
-                        ${new Date(task.date).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                    </div>
-                `
-                    : ""
-                }
-                <time>${new Date(task.date).toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "2-digit",
-                  hour12: true,
-                })}</time>
-            </div>
-            <h4 class="task-title">${task.title}</h4>
-            <div class="task-preview-priority ${task.priority}" 
-                 aria-label="Priority: ${task.priority}">
-            </div>
+      <div class="sidebar-task-preview" data-task-id="${task.id}">
+        <h4>${task.title}</h4>
+        <time>${new Date(task.date).toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        })}</time>
+        <div class="task-preview-priority ${task.priority}" 
+             aria-label="Priority: ${task.priority}">
         </div>
+      </div>
     `);
 
     taskElement.addEventListener("click", () => {

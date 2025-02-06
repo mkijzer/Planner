@@ -2,12 +2,15 @@
 
 .header {
   grid-area: 1 / 1 / 2 / 6;
-  background-color: var(--gray);
+  background: var(--cream);
+  border-radius: var(--neu-radius);
+  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
   color: var(--text-light);
   opacity: 0.9;
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 2rem; /* Smaller padding */
+  margin-bottom: var(--spacing-sm);
   height: 60px; /* Fixed height */
   align-items: center; /* Center content vertically */
 }
@@ -16,8 +19,7 @@
   font-family: var(--font-accent);
   font-size: var(--text-3xl);
   margin: 0;
-  color: var(--brown);
-
+  color: var(--text-dark);
   letter-spacing: 0.02em;
 }
 
@@ -26,12 +28,12 @@
   font-family: var(--font-nav);
   font-weight: bold;
   gap: var(--spacing-md);
-  color: var(--brown);
+  color: var(--text-dark);
   list-style: none;
 }
 
 .header-nav a {
-  color: var(--brown);
+  color: var(--text-dark);
   text-decoration: none;
   font-size: var(--text-base);
   transition: opacity 0.3s ease;

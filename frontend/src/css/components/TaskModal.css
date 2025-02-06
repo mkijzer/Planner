@@ -1,4 +1,7 @@
 /* TASKMODAL.CSS */
+
+/* Modal Structure
+   ========================================================================== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -6,48 +9,60 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display: none; /* Changed from visibility: hidden */
+  display: none;
   justify-content: center;
   align-items: center;
   z-index: 999;
 }
 
 .modal-overlay.show {
-  display: flex; /* Changed from visibility: visible */
+  display: flex;
 }
 
 .modal-content {
-  background-color: var(--cream);
+  background: var(--cream);
   padding: var(--spacing-lg);
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: var(--neu-radius);
   max-width: 500px;
   width: 90%;
   position: relative;
   max-height: 90vh;
   overflow-y: auto;
-}
-
-.modal-content h2 {
-  font-size: var(--text-2xl); /* Consistent size for the modal title */
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1),
+    -5px -5px 10px rgba(255, 255, 255, 0.5);
 }
 
 .modal-close {
   position: absolute;
-  top: var(--spacing-sm);
-  right: var(--spacing-sm);
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
   font-size: var(--text-xl);
   color: var(--brown);
   cursor: pointer;
-}
-
-#task-form {
+  /* Make it round */
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  /* Center the X */
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  align-items: center;
+  justify-content: center;
+  /* Pop-out effect */
+  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+  transition: all 0.2s ease;
+}
+.modal-close:hover {
+  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
 }
 
-.task-form {
+.modal-close:active {
+  box-shadow: inset 2px 2px 4px var(--shadow-dark),
+    inset -2px -2px 4px var(--shadow-light);
+}
+
+/* Form Layout
+     ========================================================================== */
+#task-form {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -59,111 +74,106 @@
   gap: var(--spacing-sm);
 }
 
+/* Form Elements
+     ========================================================================== */
 .form-group label {
   font-weight: 700;
   color: var(--brown);
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5),
+    -1px -1px 1px rgba(0, 0, 0, 0.1);
 }
 
-.form-group input {
+.form-group input,
+.form-group textarea,
+.task-notes {
+  width: 100%;
   padding: var(--spacing-sm);
-  border: 1px solid var(--gray);
-  border-radius: 4px;
-  font-size: var(--text-base);
-}
-
-.btn-submit {
-  background-color: var(--brown);
-  color: var(--text-light);
   border: none;
+  border-radius: var(--neu-radius);
+  background: var(--cream);
+  /* Inset shadow effect */
+  box-shadow: inset 2px 2px 4px var(--shadow-dark),
+    inset -2px -2px 4px var(--shadow-light);
+  /* Text style for depth */
+  color: var(--brown);
+  text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
+    0.5px 0.5px 0.5px var(--shadow-dark);
+  /* Smooth transition */
+  transition: all 0.2s ease;
+}
+
+/* Focus state */
+.form-group input:focus,
+.form-group textarea:focus,
+.task-notes:focus {
+  outline: none;
+  box-shadow: inset 3px 3px 6px var(--shadow-dark),
+    inset -3px -3px 6px var(--shadow-light);
+}
+
+/* Button Styles
+     ========================================================================== */
+.btn-submit,
+.priority-btn,
+.reminder-btn {
   padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: 4px;
-  font-size: var(--text-base);
+  border: none;
+  background: var(--cream);
+  border-radius: var(--neu-radius);
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  /* More subtle text depth effect */
+  color: var(--brown);
+  text-shadow: 0.5px 0.5px 0.5px var(--shadow-light),
+    -0.5px -0.5px 0.5px var(--shadow-dark);
+  font-weight: bold;
+  /* Button pop effect */
+  box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+  transition: all 0.2s ease;
 }
 
-.btn-submit:hover {
-  opacity: 0.9;
+.btn-submit:hover,
+.priority-btn:hover,
+.reminder-btn:hover {
+  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
 }
 
-#tasks-list {
-  margin-bottom: var(--spacing-lg);
+/* Subtle inset text when pressed/selected */
+.btn-submit:active,
+.priority-btn.selected,
+.reminder-btn.selected {
+  box-shadow: inset 4px 4px 8px var(--shadow-dark),
+    inset -4px -4px 8px var(--shadow-light);
+  /* Reduced shadow values for more delicate inlay */
+  text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
+    0.5px 0.5px 0.5px var(--shadow-dark);
 }
 
-#task-list-container {
-  list-style-type: none;
-  padding: 0;
-}
-
-#task-list-container li {
-  margin-bottom: var(--spacing-sm);
-}
-
-#add-task-section {
-  margin-top: var(--spacing-lg);
-}
-
-#taskTitle {
-  padding: var(--spacing-sm);
-  border: 1px solid var(--gray);
-  border-radius: 4px;
-  width: 100%;
-}
-
-#taskTime {
-  padding: var(--spacing-sm);
-  border: 1px solid var(--gray);
-  border-radius: 4px;
-  width: 100%;
-}
-
-.hidden {
-  display: none;
-}
-
-#show-task-form {
-  margin-top: var(--spacing-md);
-  width: 100%;
-}
-
-/* Priority Buttons */
-.priority-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.priority-btn {
-  padding: 6px 12px;
-  border: 1px solid var(--gray);
-  background: transparent;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.priority-btn.selected {
-  color: white;
-}
-
+/* Priority Button States
+     ========================================================================== */
 .priority-btn[data-priority="low"].selected {
-  background: #4caf50;
-  border-color: #4caf50;
+  color: #4caf50;
 }
 
 .priority-btn[data-priority="medium"].selected {
-  background: #ff9800;
-  border-color: #ff9800;
+  color: #ff9800;
 }
 
 .priority-btn[data-priority="high"].selected {
-  background: #f44336;
-  border-color: #f44336;
+  color: #f44336;
 }
 
-/* Tags */
+/* Reminder Button States
+     ========================================================================== */
+.reminder-btn.selected {
+  color: var(--orange);
+}
+
+/* Tag System
+     ========================================================================== */
 .tag-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--spacing-sm);
 }
 
 .selected-tags {
@@ -173,100 +183,89 @@
 }
 
 .tag {
-  background: var(--brown);
-  color: white;
-  padding: 4px 8px;
+  background: var(--cream);
+  color: var(--brown);
+  padding: 4px 12px;
   border-radius: 12px;
   font-size: 12px;
   display: flex;
   align-items: center;
   gap: 4px;
+  /* Add inset effect for selected tags */
+  box-shadow: inset 2px 2px 4px var(--shadow-dark),
+    inset -2px -2px 4px var(--shadow-light);
+  /* Text depth */
+  text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
+    0.5px 0.5px 0.5px var(--shadow-dark);
 }
 
 .tag-remove {
   cursor: pointer;
-}
-
-/* Reminder Buttons */
-.reminder-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.reminder-btn {
-  padding: 6px 12px;
-  border: 1px solid var(--gray);
-  background: transparent;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.reminder-btn.selected {
-  background: var(--brown);
-  color: white;
-}
-
-/* Notes Textarea */
-.task-notes {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid var(--gray);
-  border-radius: 4px;
-  resize: vertical;
-}
-
-/* Task Preview in Calendar */
-.task-preview {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 8px;
-  font-size: 11px;
-}
-
-.task-preview-priority {
-  width: 8px;
-  height: 8px;
+  padding: 2px 4px;
   border-radius: 50%;
+  /* Make the X slightly pop out */
+  box-shadow: 1px 1px 2px var(--shadow-dark), -1px -1px 2px var(--shadow-light);
 }
 
-.task-preview-priority.low {
-  background: #4caf50;
-}
-.task-preview-priority.medium {
-  background: #ff9800;
-}
-.task-preview-priority.high {
-  background: #f44336;
+.tag-remove:hover {
+  box-shadow: inset 1px 1px 2px var(--shadow-dark),
+    inset -1px -1px 2px var(--shadow-light);
 }
 
-.priority-btn.selected,
-.reminder-btn.selected {
-  background-color: #007bff;
-  color: white;
-}
-
-.task-meta {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
+/* Task Actions
+     ========================================================================== */
 .task-actions {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-sm);
 }
 
 .edit-task,
 .delete-task {
   padding: 4px 8px;
-  border: 1px solid var(--gray);
-  border-radius: 4px;
+  border-radius: var(--neu-radius);
   cursor: pointer;
 }
 
 .delete-task {
   background: #f44336;
-  color: white;
+  color: var(--text-light);
   border: none;
+}
+
+/* Utility Classes
+     ========================================================================== */
+.hidden {
+  display: none;
+}
+
+/* Dropdown menu styling */
+.tag-container datalist,
+.tag-container select,
+.tag-container input[list] + div {
+  background: var(--cream);
+  border-radius: var(--neu-radius);
+  padding: var(--spacing-sm);
+  box-shadow: inset 2px 2px 4px var(--shadow-dark),
+    inset -2px -2px 4px var(--shadow-light);
+}
+
+/* Individual dropdown options */
+.tag-container option,
+.tag-container input[list] + div > div {
+  padding: 8px 12px;
+  color: var(--brown);
+  border-radius: var(--neu-radius);
+  margin: 2px 0;
+  cursor: pointer;
+  /* Text depth effect */
+  text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
+    0.5px 0.5px 0.5px var(--shadow-dark);
+}
+
+/* Hover state for options */
+.tag-container option:hover,
+.tag-container input[list] + div > div:hover {
+  background: var(--gray);
+  box-shadow: inset 1px 1px 2px var(--shadow-dark),
+    inset -1px -1px 2px var(--shadow-light);
 }

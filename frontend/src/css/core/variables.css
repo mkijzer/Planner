@@ -1,5 +1,4 @@
 /* VARIABLES.CSS */
-
 :root {
   /* Main Colors */
   --orange: #ee7a00;
@@ -15,7 +14,14 @@
 
   /* Text Colors */
   --text-light: #ffffff;
-  --text-dark: #333333;
+  --text-dark: rgba(51, 51, 51, 0.7);
+
+  /* Neumorphic properties */
+  --shadow-light: rgba(255, 255, 255, 0.7);
+  --shadow-dark: rgba(48, 30, 26, 0.15);
+  --neu-distance: 8px;
+  --neu-radius: 15px;
+  --neu-padding: 20px;
 
   /* Spacing */
   --spacing-sm: 0.5rem;
@@ -37,4 +43,11 @@
   --text-3xl: 1.8rem; /* 28.8px */
   --text-4xl: 2.25rem; /* 36px */
   --text-5xl: 2.7rem; /* 43.2px */
+
+  /* Shadow variables */
+  --shadow-dark: rgba(0, 0, 0, 0.1);
+  --shadow-light: rgba(255, 255, 255, 0.5);
+  --neu-distance: 5px;
+  --neu-radius: 8px;
+  --neu-padding: 1rem;
 }
