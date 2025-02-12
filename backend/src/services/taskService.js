@@ -7,17 +7,19 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const taskService = {
+  // Keep your existing methods but add better error messages
   async getAllTasks() {
     try {
-      console.log("Fetching all tasks");
-      const tasks = await prisma.task.findMany();
+      const tasks = await prisma.task.findMany({
+        orderBy: { date: "asc" }, // Add sorting
+      });
       return tasks.map((task) => ({
         ...task,
         tags: task.tags ? JSON.parse(task.tags) : [],
       }));
     } catch (error) {
-      console.error("Error fetching tasks:", error);
-      throw error;
+      console.error("Database error in getAllTasks:", error);
+      throw new Error("Failed to fetch tasks");
     }
   },
 

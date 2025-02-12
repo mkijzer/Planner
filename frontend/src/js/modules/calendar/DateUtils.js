@@ -99,20 +99,39 @@ export function isToday(date) {
 // Function to generate time slots for a specific range, based on the locale settings
 export function generateTimeSlots() {
   const slots = [];
-  for (let i = 6; i <= 21; i++) {
-    const time = new Date(2024, 0, 1, i); // Example date with hour `i`
+
+  // Part 1: Evening hours (6:00 - 23:00)
+  for (let i = 6; i <= 23; i++) {
+    const time = new Date(2024, 0, 1, i);
     slots.push(
       time.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
     );
   }
+  // This loop creates slots for 6:00, 7:00... up to 23:00
+  // Total: 18 slots
+
+  // Part 2: Early morning hours (00:00 - 05:00)
+  for (let i = 0; i <= 5; i++) {
+    const time = new Date(2024, 0, 2, i); // Using next day
+    slots.push(
+      time.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+    );
+  }
+  // This loop adds slots for 00:00, 1:00... up to 5:00
+  // Total: 6 slots
+
   return slots;
 }
 
-// Function to get the hour from a given time slot index
 export const getHourFromTimeSlot = (index) => {
-  return index + 6;
+  if (index <= 17) {
+    // First 18 slots (6-23)
+    return index + 6; // Convert 0->6, 1->7, etc.
+  } else {
+    // Last 6 slots (0-5)
+    return index - 18; // Convert 18->0, 19->1, etc.
+  }
 };
-
 /*
   Original code (for fallback):
   
