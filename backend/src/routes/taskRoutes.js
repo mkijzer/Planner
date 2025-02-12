@@ -1,7 +1,7 @@
 // TaskRoutes.js
 
 import express from "express";
-import { taskService } from "../services/taskService.js";
+import taskService from "../services/taskService.js";
 
 const router = express.Router();
 

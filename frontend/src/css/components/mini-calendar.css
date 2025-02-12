@@ -26,10 +26,17 @@
   width: 16px;
   height: 16px;
   display: flex;
+  margin-left: 10px;
+  margin-right: 10px;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--brown);
+}
+
+.columnheade {
+  margin-bottom: 2px;
+  color: var(--text-dark);
 }
 
 .mini-calendar-days {
@@ -57,7 +64,7 @@
 
 .mini-calendar-day:hover {
   background: none;
-  border-radius: 50%;
+  border-radius: 25%;
   /* Add pressed/stamped in effect on hover */
   box-shadow: inset 2px 2px 4px var(--shadow-dark),
     inset -2px -2px 4px var(--shadow-light);

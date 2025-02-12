@@ -1,36 +1,75 @@
 /* MAIN.CSS */
 
+/* Prevent page scroll */
 .main-grid {
   height: 100vh;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 60px minmax(0, 1fr) 40px;
-  gap: var(--spacing-sm); /* Reduce overall grid gap */
-  padding: var(--spacing-sm); /* Reduce padding */
+  grid-template-rows: 80px 1fr; /* Increase from 60px to 80px for header */
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-sm) var(--spacing-sm)
+    var(--spacing-sm); /* More padding at top */
   background-color: var(--cream);
+  padding-bottom: 60px;
+  overflow: hidden;
 }
 
+/* Allow scrolling only in calendar grid */
 .main {
-  grid-area: 2 / 2 / 5 / 6;
-  /* background: linear-gradient(20deg, var(--cream), var(--gray)); */
+  overflow: hidden;
+}
+
+.month-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Keep calendar grid days scrollable */
+.calendar-grid-days {
+  height: calc(
+    100vh - 270px
+  ); /* Adjusted from 250px to account for larger header */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Ensure body doesn't scroll */
+body {
+  overflow: hidden;
+  margin: 0;
+  height: 100vh;
+}
+
+.main-grid {
+  min-height: 100vh; /* Changed from height to min-height */
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 80px 1fr;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-sm) var(--spacing-sm)
+    var(--spacing-sm);
+  background-color: var(--cream);
+  padding-bottom: 60px; /* Add padding for footer */
+}
+.main {
+  grid-area: 2 / 2 / 3 / 6;
   opacity: 0.9;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 40px; /* Add margin for footer */
 }
 
 /* FOOTER */
 .footer {
-  grid-area: 5 / 1 / 6 / 6;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
   background-color: var(--gray);
   color: var(--text-light);
   opacity: 0.9;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  z-index: -1;
-  height: 40px;
   display: flex;
   align-items: center;
   padding: 0 2rem;
-  /* Remove margin if any */
   margin: 0;
+  z-index: 1000; /* Ensure footer is always on top */
 }

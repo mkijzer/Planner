@@ -1,0 +1,141 @@
+@media screen and (max-width: 768px) {
+  /* Reset body and html for full-screen mobile view */
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+
+    overflow: hidden;
+    background-color: var(--main-bg);
+  }
+  /* Hide header for minimal design */
+  .header {
+    display: none;
+  }
+  .month-container {
+    display: none !important;
+  }
+  .main-grid {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 10px;
+    margin: 0;
+    background-color: var(--main-bg);
+    box-sizing: border-box;
+  }
+  /* Hide the main calendar */
+  .main-calendar {
+    display: none !important;
+  }
+  /* Unified background for mini-calendar and event section */
+  .main-grid {
+    background-color: var(--main-bg);
+  }
+  /* Combined styling for mini-calendar and event section */
+  .mini-calendar,
+  .event-section {
+    background-color: var(--main-bg);
+    /* Enhanced neumorphic shadow with light source from above */
+    box-shadow: 8px 8px 16px var(--shadow-dark),
+      -8px -8px 16px var(--shadow-light);
+    border-radius: var(--neu-radius);
+  }
+  /* Keep only the mini-calendar */
+  .mini-calendar {
+    width: 100%;
+    max-width: none;
+    height: 40vh;
+    padding: 10px 10px 20px 10px; /* Top Right Bottom Left */
+    font-size: var(--text-md);
+    box-sizing: border-box;
+    margin-bottom: 0; /* Remove margin between calendar and events */
+  }
+  /* Consistent shadows for individual elements */
+  .mini-calendar > div,
+  .event-section > div {
+    background-color: var(--main-bg);
+    box-shadow: 8px 8px 16px var(--shadow-dark),
+      -8px -8px 16px var(--shadow-light);
+    border-radius: var(--neu-radius);
+    margin-bottom: 10px;
+  }
+  /* Bigger calendar title */
+  .mini-calendar-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 0;
+    color: var(--brown);
+  }
+  /* Bigger and better-positioned arrows */
+  .calendar-nav {
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--brown);
+  }
+  .calendar-nav.left {
+    margin-left: 1rem;
+  }
+  .calendar-nav.right {
+    margin-right: 1rem;
+  }
+  .mini-calendar table {
+    width: 100%;
+  }
+  .mini-calendar th,
+  .mini-calendar td {
+    text-align: center;
+    color: var(--text-dark);
+    padding: 5px;
+  }
+  .mini-calendar .current-day {
+    color: var(--orange);
+    font-weight: bold;
+  }
+  /* Event section fills remaining space */
+  .event-section {
+    flex-grow: 1;
+    overflow-y: auto;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: var(--main-bg); /* Ensure consistent background */
+  }
+  .event-section > div {
+    background-color: var(--main-bg);
+    border-radius: var(--neu-radius);
+    margin-bottom: 10px;
+    padding: 15px;
+  }
+  .event-section > div h3 {
+    margin: 0 0 5px 0;
+    color: var(--text-dark);
+    font-size: var(--text-base);
+  }
+  .event-section > div p {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: var(--text-sm);
+  }
+  .event-section .event-tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+  }
+  .event-section .event-tabs div {
+    color: var(--text-dark);
+    cursor: pointer;
+    padding: 5px;
+  }
+  .event-section .event-tabs div.active {
+    color: var(--orange);
+    font-weight: bold;
+  }
+  /* Hide the "Today's Events" header */
+  .aside-today h2 {
+    display: none;
+  }
+}

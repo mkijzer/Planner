@@ -26,20 +26,27 @@ export class CalendarHeader extends Component {
     const weekEnd = new Date(this.currentWeekStart);
     weekEnd.setDate(weekEnd.getDate() + 6);
 
+    // Format the date string as "Month Year" on top and "Start Day - End Day" below
+    const monthYear = this.currentWeekStart.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+
+    const startDay = this.currentWeekStart.toLocaleDateString("en-US", {
+      day: "numeric",
+    });
+
+    const endDay = weekEnd.toLocaleDateString("en-US", {
+      day: "numeric",
+    });
+
     // Update the existing title instead of replacing the whole container
     const titleElement = this.container.querySelector(".month-nav-title");
     if (titleElement) {
-      titleElement.textContent = `${this.currentWeekStart.toLocaleDateString(
-        "en-US",
-        {
-          month: "long",
-          day: "numeric",
-        }
-      )} - ${weekEnd.toLocaleDateString(undefined, {
-        month: "long",
-        day: "numeric",
-        // year: "numeric",
-      })}`;
+      titleElement.innerHTML = `
+        <div>${monthYear}</div>
+        <div>${startDay} - ${endDay}</div>
+      `;
     }
   }
 

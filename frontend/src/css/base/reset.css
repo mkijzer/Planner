@@ -1,0 +1,26 @@
+/* Simple reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--text-dark);
+  background: var(--cream);
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-accent);
+  color: var(--brown);
+}

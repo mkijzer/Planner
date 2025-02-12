@@ -35,13 +35,13 @@ export class MiniCalendar extends Component {
      <button class="mini-next-month" aria-label="Next month">&gt;</button>
    </header>
    <div class="mini-calendar-days" role="grid">
-     <div role="columnheader">Su</div>
-     <div role="columnheader">Mo</div>
-     <div role="columnheader">Tu</div>
-     <div role="columnheader">We</div>
-     <div role="columnheader">Th</div>
-     <div role="columnheader">Fr</div>
-     <div role="columnheader">Sa</div>
+     <div class="columnheade" role="columnheader">Su</div>
+     <div class="columnheade"role="columnheader">Mo</div>
+     <div class="columnheade"role="columnheader">Tu</div>
+     <div class="columnheade" role="columnheader">We</div>
+     <div class="columnheade"role="columnheader">Th</div>
+     <div class="columnheade"role="columnheader">Fr</div>
+     <div class="columnheade"role="columnheader">Sa</div>
    `;
 
     // Previous month days

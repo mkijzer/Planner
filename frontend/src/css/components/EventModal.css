@@ -62,7 +62,7 @@
 
 /* Form Layout
      ========================================================================== */
-#task-form {
+#event-form {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -85,7 +85,7 @@
 
 .form-group input,
 .form-group textarea,
-.task-notes {
+.event-notes {
   width: 100%;
   padding: var(--spacing-sm);
   border: none;
@@ -105,7 +105,7 @@
 /* Focus state */
 .form-group input:focus,
 .form-group textarea:focus,
-.task-notes:focus {
+.event-notes:focus {
   outline: none;
   box-shadow: inset 3px 3px 6px var(--shadow-dark),
     inset -3px -3px 6px var(--shadow-light);
@@ -145,26 +145,7 @@
     inset -4px -4px 8px var(--shadow-light);
   /* Reduced shadow values for more delicate inlay */
   text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
-    0.5 px 0.5px 0.5px var(--shadow-dark);
-}
-
-.edit-btn,
-.delete-btn {
-  padding: 8px 16px;
-  border-radius: var(--neu-radius);
-  cursor: pointer;
-  font-weight: bold;
-  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
-}
-
-.edit-btn {
-  background: var(--cream);
-  color: var(--text-dark);
-}
-
-.delete-btn {
-  background: #f44336;
-  color: white;
+    0.5px 0.5px 0.5px var(--shadow-dark);
 }
 
 /* Priority Button States
@@ -231,46 +212,21 @@
     inset -1px -1px 2px var(--shadow-light);
 }
 
-/* Task Actions
+/* Event Actions
      ========================================================================== */
-.task-actions {
+.event-actions {
   display: flex;
   gap: var(--spacing-sm);
 }
 
-.task-details {
-  margin: 20px 0;
-}
-
-.detail-row {
-  margin-bottom: 15px;
-}
-
-.detail-label {
-  font-weight: bold;
-  color: var(--text-dark);
-  display: block;
-  margin-bottom: 5px;
-}
-
-.detail-value {
-  color: var(--text-dark);
-}
-
-.task-actions {
-  display: flex;
-  gap: var(--spacing-sm);
-  margin-top: 20px;
-}
-
-.edit-task,
-.delete-task {
+.edit-event,
+.delete-event {
   padding: 4px 8px;
   border-radius: var(--neu-radius);
   cursor: pointer;
 }
 
-.delete-task {
+.delete-event {
   background: #f44336;
   color: var(--text-light);
   border: none;

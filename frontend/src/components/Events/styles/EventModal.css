@@ -8,15 +8,26 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: flex; /* Always flex, we will hide with opacity instead */
   justify-content: center;
   align-items: center;
   z-index: 999;
+  backdrop-filter: blur(0px);
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out, backdrop-filter 0.4s ease-in-out;
+  pointer-events: none; /* Prevents clicks when invisible */
 }
 
 .modal-overlay.show {
-  display: flex;
+  opacity: 1;
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
+}
+
+.modal-overlay.show .modal-content {
+  transform: scale(1); /* Grow to normal size */
+  opacity: 1;
 }
 
 .modal-content {
@@ -28,8 +39,16 @@
   position: relative;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1),
-    -5px -5px 10px rgba(255, 255, 255, 0.5);
+  /* box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1),
+    -5px -5px 10px rgba(255, 255, 255, 0.5); */
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.4s ease-out, opacity 0.3s ease-out;
+}
+
+.modal-overlay.show .modal-content {
+  transform: scale(1);
+  opacity: 1;
 }
 
 .modal-close {
@@ -37,7 +56,7 @@
   top: var(--spacing-lg);
   right: var(--spacing-lg);
   font-size: var(--text-xl);
-  color: var(--brown);
+  color: var(--orange);
   cursor: pointer;
   /* Make it round */
   width: 30px;
@@ -62,7 +81,7 @@
 
 /* Form Layout
      ========================================================================== */
-#task-form {
+#event-form {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -78,14 +97,14 @@
      ========================================================================== */
 .form-group label {
   font-weight: 700;
-  color: var(--brown);
+  color: var(--text-dark);
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5),
     -1px -1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .form-group input,
 .form-group textarea,
-.task-notes {
+.event-notes {
   width: 100%;
   padding: var(--spacing-sm);
   border: none;
@@ -95,7 +114,7 @@
   box-shadow: inset 2px 2px 4px var(--shadow-dark),
     inset -2px -2px 4px var(--shadow-light);
   /* Text style for depth */
-  color: var(--brown);
+  color: var(--text-dark);
   text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
     0.5px 0.5px 0.5px var(--shadow-dark);
   /* Smooth transition */
@@ -105,7 +124,7 @@
 /* Focus state */
 .form-group input:focus,
 .form-group textarea:focus,
-.task-notes:focus {
+.event-notes:focus {
   outline: none;
   box-shadow: inset 3px 3px 6px var(--shadow-dark),
     inset -3px -3px 6px var(--shadow-light);
@@ -122,7 +141,7 @@
   border-radius: var(--neu-radius);
   cursor: pointer;
   /* More subtle text depth effect */
-  color: var(--brown);
+  color: var(--text-dark);
   text-shadow: 0.5px 0.5px 0.5px var(--shadow-light),
     -0.5px -0.5px 0.5px var(--shadow-dark);
   font-weight: bold;
@@ -145,26 +164,7 @@
     inset -4px -4px 8px var(--shadow-light);
   /* Reduced shadow values for more delicate inlay */
   text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
-    0.5 px 0.5px 0.5px var(--shadow-dark);
-}
-
-.edit-btn,
-.delete-btn {
-  padding: 8px 16px;
-  border-radius: var(--neu-radius);
-  cursor: pointer;
-  font-weight: bold;
-  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
-}
-
-.edit-btn {
-  background: var(--cream);
-  color: var(--text-dark);
-}
-
-.delete-btn {
-  background: #f44336;
-  color: white;
+    0.5px 0.5px 0.5px var(--shadow-dark);
 }
 
 /* Priority Button States
@@ -203,7 +203,7 @@
 
 .tag {
   background: var(--cream);
-  color: var(--brown);
+  color: var(--text-dark);
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 12px;
@@ -231,49 +231,50 @@
     inset -1px -1px 2px var(--shadow-light);
 }
 
-/* Task Actions
+/* Event Actions
      ========================================================================== */
-.task-actions {
+.event-actions {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-.task-details {
-  margin: 20px 0;
-}
-
-.detail-row {
-  margin-bottom: 15px;
-}
-
-.detail-label {
-  font-weight: bold;
-  color: var(--text-dark);
-  display: block;
-  margin-bottom: 5px;
-}
-
-.detail-value {
-  color: var(--text-dark);
-}
-
-.task-actions {
-  display: flex;
-  gap: var(--spacing-sm);
-  margin-top: 20px;
-}
-
-.edit-task,
-.delete-task {
+.edit-event,
+.delete-event {
   padding: 4px 8px;
   border-radius: var(--neu-radius);
   cursor: pointer;
 }
 
-.delete-task {
+.delete-event {
   background: #f44336;
-  color: var(--text-light);
+  color: var(--orange);
   border: none;
+}
+
+.edit-event,
+.delete-event {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  background: var(--cream);
+  border-radius: var(--neu-radius);
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+  transition: all 0.2s ease;
+}
+
+.edit-event {
+  color: var(--text-dark);
+}
+
+.delete-event {
+  color: var(--orange);
+}
+
+.edit-event:hover,
+.delete-event:hover {
+  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
 }
 
 /* Utility Classes
@@ -312,4 +313,47 @@
   background: var(--gray);
   box-shadow: inset 1px 1px 2px var(--shadow-dark),
     inset -1px -1px 2px var(--shadow-light);
+}
+
+.event-details {
+  margin-bottom: var(--spacing-lg);
+}
+
+.event-details {
+  margin-bottom: var(--spacing-lg);
+}
+
+.event-details .form-group {
+  margin-bottom: 2rem;
+}
+
+.event-details h3 {
+  color: var(--text-dark);
+  font-size: var(--text-base);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.detail-value {
+  display: block;
+  color: var(--text-dark);
+  font-size: var(--text-base);
+}
+
+.action-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.event-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Remove bullet from event list */
+.event-list-item {
+  list-style: none;
 }

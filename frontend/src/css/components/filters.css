@@ -1,0 +1,33 @@
+/* Filter components */
+.task-filters {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.task-filter-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--neu-radius);
+  background: var(--cream);
+  border: none;
+  color: var(--brown);
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+.task-filter-btn.active {
+  box-shadow: inset var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    inset calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
+  transform: scale(0.95);
+}
+
+.task-filter-btn:hover:not(.active) {
+  transform: translateY(-2px);
+}

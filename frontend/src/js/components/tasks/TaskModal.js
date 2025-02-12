@@ -1,33 +1,25 @@
-// src/js/components/tasks/TaskModal.js
+import { formatTime } from "../../modules/calendar/DateUtils.js";
+
 export class TaskModal {
   constructor(taskManager) {
     this.taskManager = taskManager;
     this.modal = document.getElementById("taskModal");
     this.tasksView = document.getElementById("tasks-view");
     this.addTaskForm = document.getElementById("add-task-form");
-    this.modalDate = document.getElementById("modal-date");
+
+    // Update element references to match new HTML
+    this.modalHeading = document.getElementById("modal-heading");
+    this.taskDateEl = document.getElementById("task-date");
+    this.taskTimeEl = document.getElementById("task-time");
+    this.taskReminder = document.getElementById("task-reminder");
+    this.taskNotes = document.getElementById("task-notes");
+
+    if (!this.modal || !this.tasksView || !this.addTaskForm) {
+      console.error("Required modal elements not found");
+      return;
+    }
 
     this.initialize();
-  }
-
-  async handleSubmit(event) {
-    event.preventDefault();
-    const taskData = {
-      title: document.getElementById("taskTitle").value,
-      description: document.getElementById("taskNotes").value,
-      // Add other fields as needed
-    };
-
-    try {
-      await this.taskManager.addTask(taskData);
-      // Refresh the task list
-      const taskList = new TaskList(
-        document.querySelector(".today-tasks"),
-        this.taskManager.taskService
-      );
-    } catch (error) {
-      console.error("Error adding task:", error);
-    }
   }
 
   initialize() {
@@ -49,8 +41,10 @@ export class TaskModal {
 
     document.addEventListener("deleteTask", (e) => {
       const { taskId } = e.detail;
-      this.taskManager.deleteTask(taskId);
-      this.modal.classList.remove("show");
+      if (confirm("Are you sure you want to delete this task?")) {
+        this.taskManager.deleteTask(taskId);
+        this.closeModal();
+      }
     });
 
     document.addEventListener("openTaskDetails", (e) => {
@@ -61,13 +55,6 @@ export class TaskModal {
     document.getElementById("show-task-form")?.addEventListener("click", () => {
       this.showTaskForm();
     });
-
-    const modalCloseButton = this.modal.querySelector(".modal-close");
-    if (modalCloseButton) {
-      modalCloseButton.addEventListener("click", () => {
-        this.closeModal();
-      });
-    }
 
     const taskForm = document.getElementById("task-form");
     if (taskForm) {
@@ -81,24 +68,13 @@ export class TaskModal {
   setupFormHandlers() {
     const priorityContainer = document.querySelector(".priority-buttons");
     if (priorityContainer) {
-      // Remove old listeners first
-      const newPriorityContainer = priorityContainer.cloneNode(true);
-      priorityContainer.parentNode.replaceChild(
-        newPriorityContainer,
-        priorityContainer
-      );
-
-      newPriorityContainer.addEventListener("click", (e) => {
-        const priorityBtn = e.target.closest(".priority-btn");
-        if (priorityBtn) {
-          // Remove selected class from all buttons
-          newPriorityContainer
+      priorityContainer.addEventListener("click", (e) => {
+        const btn = e.target.closest(".priority-btn");
+        if (btn) {
+          priorityContainer
             .querySelectorAll(".priority-btn")
-            .forEach((btn) => {
-              btn.classList.remove("selected");
-            });
-          // Add selected class to clicked button
-          priorityBtn.classList.add("selected");
+            .forEach((b) => b.classList.remove("selected"));
+          btn.classList.add("selected");
         }
       });
     }
@@ -106,12 +82,12 @@ export class TaskModal {
     const reminderContainer = document.querySelector(".reminder-buttons");
     if (reminderContainer) {
       reminderContainer.addEventListener("click", (e) => {
-        const reminderBtn = e.target.closest(".reminder-btn");
-        if (reminderBtn) {
-          reminderContainer.querySelectorAll(".reminder-btn").forEach((btn) => {
-            btn.classList.remove("selected");
-          });
-          reminderBtn.classList.add("selected");
+        const btn = e.target.closest(".reminder-btn");
+        if (btn) {
+          reminderContainer
+            .querySelectorAll(".reminder-btn")
+            .forEach((b) => b.classList.remove("selected"));
+          btn.classList.add("selected");
         }
       });
     }
@@ -141,40 +117,150 @@ export class TaskModal {
     }
   }
 
-  openTaskModal(date, hour) {
-    this.updateModalDate(date, hour);
-    this.resetForm();
-    this.setupTimeInput(hour);
-    this.setupTaskForm(date);
-    this.showTaskForm();
-    this.showModal();
+  showModal() {
+    this.modal.classList.add("show");
+    this.modal.setAttribute("aria-hidden", "false");
   }
 
-  setupTimeInput(hour) {
+  closeModal() {
+    this.modal.classList.remove("show");
+    this.modal.setAttribute("aria-hidden", "true");
+    this.resetForm();
+  }
+
+  showTaskForm() {
+    this.tasksView.classList.add("hidden");
+    this.addTaskForm.classList.remove("hidden");
+  }
+
+  showTaskDetails() {
+    this.tasksView.classList.remove("hidden");
+    this.addTaskForm.classList.add("hidden");
+  }
+
+  resetForm() {
+    const form = document.getElementById("task-form");
+    if (form) {
+      form.reset();
+      document.getElementById("selectedTags").innerHTML = "";
+      document
+        .querySelectorAll(".priority-btn, .reminder-btn")
+        .forEach((btn) => btn.classList.remove("selected"));
+    }
+  }
+
+  openTaskModal(date, hour) {
+    this._currentDate = date;
+    this.resetForm();
+
     const taskTimeInput = document.getElementById("taskTime");
     if (taskTimeInput) {
       const hourStr = hour.toString().padStart(2, "0");
       taskTimeInput.value = `${hourStr}:00`;
     }
+
+    if (this.taskDateEl) {
+      this.taskDateEl.textContent = this.formatDate(date);
+    }
+    if (this.taskTimeEl) {
+      this.taskTimeEl.textContent = formatTime(new Date().setHours(hour, 0, 0));
+    }
+
+    this.showTaskForm();
+    this.showModal();
   }
 
-  setupTaskForm(date) {
-    this._currentDate = date;
+  openTaskDetails(task) {
+    if (this.modalHeading) {
+      this.modalHeading.textContent = task.title;
+    }
+
+    const date = new Date(task.date);
+
+    if (this.taskDateEl) {
+      this.taskDateEl.textContent = this.formatDate(date);
+    }
+    if (this.taskTimeEl) {
+      this.taskTimeEl.textContent = formatTime(task.date);
+    }
+    if (this.taskNotes) {
+      this.taskNotes.textContent = task.notes || "No notes added";
+    }
+
+    // Setup edit/delete buttons
+    const editBtn = this.modal.querySelector(".edit-btn");
+    const deleteBtn = this.modal.querySelector(".delete-btn");
+
+    editBtn?.addEventListener("click", () => this.openEditForm(task));
+    deleteBtn?.addEventListener("click", () => {
+      if (confirm("Are you sure you want to delete this task?")) {
+        this.taskManager.deleteTask(task.id);
+        this.closeModal();
+      }
+    });
+
+    this.showTaskDetails();
+    this.showModal();
+  }
+
+  openEditForm(task) {
+    // Store current task data for editing
+    this._currentTaskId = task.id;
+    this._currentDate = new Date(task.date);
+
+    // Update modal header
+    if (this.modalHeading) {
+      this.modalHeading.textContent = "Edit Task";
+    }
+
+    // Populate form with task data
+    document.getElementById("taskTitle").value = task.title;
+    document.getElementById("taskTime").value = new Date(task.date)
+      .toTimeString()
+      .slice(0, 5);
+    document.getElementById("taskNotes").value = task.notes || "";
+
+    // Set priority
+    if (task.priority) {
+      document
+        .querySelector(`.priority-btn[data-priority="${task.priority}"]`)
+        ?.classList.add("selected");
+    }
+
+    // Set reminder
+    if (task.reminder) {
+      document
+        .querySelector(`.reminder-btn[data-time="${task.reminder}"]`)
+        ?.classList.add("selected");
+    }
+
+    // Set tags
+    const tagsContainer = document.getElementById("selectedTags");
+    tagsContainer.innerHTML = "";
+    task.tags?.forEach((tag) => this.addTag(tag));
+
+    // Update form submission handler for edit mode
+    const taskForm = document.getElementById("task-form");
+    if (taskForm) {
+      taskForm.onsubmit = (e) => {
+        e.preventDefault();
+        this.handleEditSubmit(this._currentTaskId);
+      };
+    }
+
+    // Show form
+    this.showTaskForm();
+    this.showModal();
   }
 
   handleTaskSubmit() {
     const taskTitle = document.getElementById("taskTitle").value;
     if (!taskTitle.trim()) return;
 
-    const taskDate = new Date(this._currentDate);
-    const timeInput = document.getElementById("taskTime");
-    const [hours, minutes] = timeInput.value.split(":").map(Number);
-    taskDate.setHours(hours, minutes, 0, 0);
-
     const taskData = {
       id: Date.now().toString(),
       title: taskTitle,
-      date: taskDate,
+      date: new Date(this._currentDate),
       priority:
         document.querySelector(".priority-btn.selected")?.dataset.priority ||
         "low",
@@ -185,50 +271,26 @@ export class TaskModal {
       ),
     };
 
+    const timeInput = document.getElementById("taskTime");
+    if (timeInput?.value) {
+      const [hours, minutes] = timeInput.value.split(":").map(Number);
+      taskData.date.setHours(hours, minutes);
+    }
+
     this.taskManager.addTask(taskData);
     this.closeModal();
-  }
-
-  openEditForm(task) {
-    this.populateFormWithTaskData(task);
-    this.modifyFormSubmissionForEdit(task.id);
-    this.showTaskForm();
-  }
-
-  populateFormWithTaskData(task) {
-    document.getElementById("taskTitle").value = task.title;
-    document.getElementById("taskTime").value = new Date(task.date)
-      .toTimeString()
-      .slice(0, 5);
-    document.getElementById("taskNotes").value = task.notes || "";
-
-    // Set priority
-    document
-      .querySelector(`.priority-btn[data-priority="${task.priority}"]`)
-      ?.classList.add("selected");
-
-    // Set tags
-    const tagsContainer = document.getElementById("selectedTags");
-    tagsContainer.innerHTML = "";
-    task.tags?.forEach((tag) => this.addTag(tag));
-  }
-
-  modifyFormSubmissionForEdit(taskId) {
-    const taskForm = document.getElementById("task-form");
-    taskForm.onsubmit = (e) => {
-      e.preventDefault();
-      this.handleEditSubmit(taskId);
-    };
   }
 
   handleEditSubmit(taskId) {
     const taskTitle = document.getElementById("taskTitle").value;
     if (!taskTitle.trim()) return;
 
-    const taskDate = new Date(this._currentDate || new Date());
+    const taskDate = new Date(this._currentDate);
     const timeInput = document.getElementById("taskTime");
-    const [hours, minutes] = timeInput.value.split(":").map(Number);
-    taskDate.setHours(hours, minutes, 0, 0);
+    if (timeInput?.value) {
+      const [hours, minutes] = timeInput.value.split(":").map(Number);
+      taskDate.setHours(hours, minutes);
+    }
 
     const taskData = {
       id: taskId,
@@ -244,150 +306,40 @@ export class TaskModal {
       ),
     };
 
-    this.taskManager.editTask(taskData);
+    this.taskManager.updateTask(taskId, taskData);
     this.closeModal();
   }
 
-  openTaskDetails(task) {
-    this.updateModalDateWithTaskDetails(task);
-    this.populateTaskDetailsView(task);
-    this.showTaskDetails();
-    this.showModal();
-  }
+  formatDate(date) {
+    // Detect the user's locale
+    const userLocale = navigator.language || "en-US"; // Use 'en-US' as a fallback
 
-  updateModalDateWithTaskDetails(task) {
-    const taskDate = new Date(task.date);
-    const hours = taskDate.getHours();
-    const minutes = taskDate.getMinutes();
-    const period = hours >= 12 ? "PM" : "AM";
-    const displayHours = hours % 12 || 12;
-    const timeString = `${displayHours}:${minutes
-      .toString()
-      .padStart(2, "0")} ${period}`;
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = new Date(date).toLocaleDateString(
+      userLocale,
+      options
+    );
 
-    this.modalDate.textContent = `${taskDate.toDateString()} at ${timeString}`;
-  }
-
-  populateTaskDetailsView(task) {
-    const taskListContainer = document.getElementById("task-list-container");
-    taskListContainer.innerHTML = this.generateTaskDetailsHTML(task);
-
-    // Add event listeners for edit and delete buttons
-    taskListContainer
-      .querySelector(".edit-task")
-      ?.addEventListener("click", (e) => {
-        const task = JSON.parse(e.target.dataset.task);
-        this.openEditForm(task);
-      });
-
-    taskListContainer
-      .querySelector(".delete-task")
-      ?.addEventListener("click", (e) => {
-        const taskId = e.target.dataset.taskId;
-        this.taskManager.deleteTask(taskId);
-        this.closeModal();
-      });
-  }
-
-  generateTaskDetailsHTML(task) {
-    return `
-      <li class="task-list-item">
-        <div class="task-header">
-          <h3>${task.title}</h3>
-          <div class="task-actions">
-            <button class="edit-task" data-task='${JSON.stringify(
-              task
-            )}'>Edit</button>
-            <button class="delete-task" data-task-id="${
-              task.id
-            }">Delete</button>
-          </div>
-        </div>
-        <div class="task-details">
-          <p><strong>Time:</strong> ${this.getTimeString(task.date)}</p>
-          <p><strong>Priority:</strong> ${task.priority}</p>
-          ${
-            task.tags?.length
-              ? `<p><strong>Categories:</strong> ${task.tags.join(", ")}</p>`
-              : ""
-          }
-          ${
-            task.reminder
-              ? `<p><strong>Reminder:</strong> ${task.reminder} minutes before</p>`
-              : ""
-          }
-          ${task.notes ? `<p><strong>Notes:</strong> ${task.notes}</p>` : ""}
-        </div>
-      </li>
-    `;
-  }
-
-  getTimeString(date) {
-    const taskDate = new Date(date);
-    const hours = taskDate.getHours();
-    const minutes = taskDate.getMinutes();
-    const period = hours >= 12 ? "PM" : "AM";
-    const displayHours = hours % 12 || 12;
-    return `${displayHours}:${minutes.toString().padStart(2, "0")} ${period}`;
-  }
-
-  addTag(tagValue) {
-    const tagsContainer = document.getElementById("selectedTags");
-    tagsContainer.innerHTML += `
-      <span class="tag" data-value="${tagValue}">
-        ${tagValue}
-        <span class="tag-remove">&times;</span>
-      </span>
-    `;
-  }
-
-  showTaskForm() {
-    this.tasksView.classList.add("hidden");
-    this.addTaskForm.classList.remove("hidden");
-  }
-
-  showTaskDetails() {
-    this.tasksView.classList.remove("hidden");
-    this.addTaskForm.classList.add("hidden");
-  }
-
-  resetForm() {
-    document.getElementById("taskTitle").value = "";
-    document.getElementById("taskNotes").value = "";
-    document.getElementById("selectedTags").innerHTML = "";
-
-    const priorityContainer = document.querySelector(".priority-buttons");
-    priorityContainer?.querySelectorAll(".priority-btn").forEach((btn) => {
-      btn.classList.remove("selected");
+    const weekday = new Date(date).toLocaleDateString(userLocale, {
+      weekday: "long",
     });
 
-    const reminderContainer = document.querySelector(".reminder-buttons");
-    reminderContainer?.querySelectorAll(".reminder-btn").forEach((btn) => {
-      btn.classList.remove("selected");
-    });
+    return `${formattedDate} (${weekday})`;
   }
 
-  updateModalDate(date, hour) {
-    let period = "AM";
-    let displayHour = hour;
-    if (hour >= 12) {
-      period = "PM";
-      displayHour = hour === 12 ? 12 : hour - 12;
-    }
-    if (hour === 0) {
-      displayHour = 12;
-    }
-    const timeStr = `${displayHour}:00 ${period}`;
-    this.modalDate.textContent = `${date.toDateString()} at ${timeStr}`;
-  }
+  addTag(tag) {
+    const tagContainer = document.getElementById("selectedTags");
+    const tagElement = document.createElement("span");
+    tagElement.classList.add("tag");
+    tagElement.dataset.value = tag;
+    tagElement.textContent = tag;
 
-  showModal() {
-    this.modal.classList.add("show");
-    this.modal.setAttribute("aria-hidden", "false");
-  }
+    const removeBtn = document.createElement("span");
+    removeBtn.classList.add("tag-remove");
+    removeBtn.textContent = "×";
+    removeBtn.addEventListener("click", () => tagElement.remove());
+    tagElement.appendChild(removeBtn);
 
-  closeModal() {
-    this.modal.classList.remove("show");
-    this.modal.setAttribute("aria-hidden", "true");
+    tagContainer.appendChild(tagElement);
   }
 }

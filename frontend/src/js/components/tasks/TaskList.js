@@ -1,56 +1,54 @@
-import { Component } from "../Component.js";
+import { Component } from "../../../components/shared/Component.js";
 
 export class TaskList extends Component {
+  // 1. Constructor and Initialization
   constructor(container, taskService) {
     const initialState = {
       tasks: [],
       filter: "today",
     };
 
-    super(container, initialState);
+    // Validate inputs
+    if (!container) {
+      throw new Error("Container is required to create TaskList");
+    }
 
     if (!taskService) {
-      throw new Error("TaskService is required");
+      throw new Error("TaskService is required to create TaskList");
     }
+
+    if (typeof taskService.getAllTasks !== "function") {
+      throw new Error("Invalid TaskService: getAllTasks method is missing");
+    }
+
+    // Call parent constructor
+    super(container, initialState);
+
+    // Attach taskService
     this.taskService = taskService;
 
+    // Set up listener for task updates
     this.unsubscribe = this.taskService.addListener((tasks) => {
       this.setState({ tasks });
     });
 
-    this.initialize();
+    // Initialize
+    this.initializeTaskList();
   }
 
-  async loadTasks() {
+  async initializeTaskList() {
     try {
-      const tasks = await this.taskService.getAllTasks();
-      switch (this.state.filter) {
-        case "today":
-          this.renderTasks(this.filterTasks(tasks));
-          break;
-        case "upcoming":
-          this.renderTasks(this.filterTasks(tasks));
-          break;
-        case "all":
-          this.renderTasks(tasks);
-          break;
-      }
+      await this.loadTasks();
+      this.setupFilterButtons();
     } catch (error) {
-      console.error("Error loading tasks:", error);
+      console.error("Error initializing TaskList:", error);
+      this.container.innerHTML = `
+        <div class="error-message">
+          <p>Unable to load tasks. Please refresh the page or contact support.</p>
+          <details>${error.message}</details>
+        </div>
+      `;
     }
-  }
-
-  renderTasks(tasks) {
-    const tasksList = document.createElement("div");
-    tasksList.className = "tasks-list";
-
-    tasks.forEach((task) => {
-      const taskElement = this.createTaskElement(task);
-      tasksList.appendChild(taskElement);
-    });
-
-    this.container.innerHTML = "";
-    this.container.appendChild(tasksList);
   }
 
   initialize() {
@@ -70,15 +68,28 @@ export class TaskList extends Component {
     });
   }
 
-  render() {
-    const filteredTasks = this.filterTasks(this.state.tasks);
+  // 2. Core Task Operations
+  async loadTasks() {
+    try {
+      const getAllTasks = this.taskService.getAllTasks.bind(this.taskService);
+      const tasks = await getAllTasks();
 
-    if (filteredTasks.length === 0) {
-      this.container.innerHTML = '<p class="no-tasks">No tasks found.</p>';
-      return;
+      switch (this.state.filter) {
+        case "today":
+        case "upcoming":
+          this.renderTasks(this.filterTasks(tasks));
+          break;
+        case "all":
+          this.renderTasks(tasks);
+          break;
+        default:
+          console.warn("Unknown filter:", this.state.filter);
+          this.renderTasks(tasks);
+      }
+    } catch (error) {
+      console.error("Error loading tasks in TaskList:", error);
+      throw error;
     }
-
-    this.renderTasks(filteredTasks);
   }
 
   filterTasks(tasks) {
@@ -107,6 +118,31 @@ export class TaskList extends Component {
     }
   }
 
+  // 3. Rendering Methods
+  render() {
+    const filteredTasks = this.filterTasks(this.state.tasks);
+
+    if (filteredTasks.length === 0) {
+      this.container.innerHTML = '<p class="no-tasks">No tasks found.</p>';
+      return;
+    }
+
+    this.renderTasks(filteredTasks);
+  }
+
+  renderTasks(tasks) {
+    const tasksList = document.createElement("div");
+    tasksList.className = "tasks-list";
+
+    tasks.forEach((task) => {
+      const taskElement = this.createTaskElement(task);
+      tasksList.appendChild(taskElement);
+    });
+
+    this.container.innerHTML = "";
+    this.container.appendChild(tasksList);
+  }
+
   createTaskElement(task) {
     const taskElement = this.createElementFromHTML(`
       <div class="sidebar-task-preview" data-task-id="${task.id}">
@@ -133,6 +169,7 @@ export class TaskList extends Component {
     return taskElement;
   }
 
+  // 4. Cleanup
   destroy() {
     if (this.unsubscribe) {
       this.unsubscribe();

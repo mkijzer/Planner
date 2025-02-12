@@ -13,8 +13,8 @@ export class CalendarGrid extends Component {
     this.taskService = taskService;
     this.timeSlots = generateTimeSlots();
     this.currentWeekStart = null;
-    this.scrollTimeout = null;
-    this.isAutoScrolling = false;
+    // this.scrollTimeout = null;
+    // this.isAutoScrolling = false;
     this.isModalOpen = false;
 
     // Setup global event listeners once
@@ -34,9 +34,9 @@ export class CalendarGrid extends Component {
     document.addEventListener("openTaskModal", () => {
       this.isModalOpen = true;
       // Clear any pending scroll timeouts when modal opens
-      if (this.scrollTimeout) {
-        clearTimeout(this.scrollTimeout);
-      }
+      // if (this.scrollTimeout) {
+      //   clearTimeout(this.scrollTimeout);
+      // }
     });
 
     document.addEventListener("closeTaskModal", () => {
@@ -137,30 +137,30 @@ export class CalendarGrid extends Component {
     });
   }
 
-  scrollToCurrentTime() {
-    this.isAutoScrolling = true;
-    const now = new Date();
-    const currentHour = now.getHours();
+  // scrollToCurrentTime() {
+  //   this.isAutoScrolling = true;
+  //   const now = new Date();
+  //   const currentHour = now.getHours();
 
-    // Find the current time slot in the current day column
-    const todayColumn = this.container.querySelector(".current-day");
-    if (todayColumn) {
-      const timeSlot = todayColumn.querySelector(
-        `[data-hour="${currentHour}"]`
-      );
-      if (timeSlot) {
-        timeSlot.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
-    }
+  //   // Find the current time slot in the current day column
+  //   const todayColumn = this.container.querySelector(".current-day");
+  //   if (todayColumn) {
+  //     const timeSlot = todayColumn.querySelector(
+  //       `[data-hour="${currentHour}"]`
+  //     );
+  //     if (timeSlot) {
+  //       timeSlot.scrollIntoView({
+  //         behavior: "smooth",
+  //         block: "center",
+  //       });
+  //     }
+  //   }
 
-    // Reset flag after scrolling
-    setTimeout(() => {
-      this.isAutoScrolling = false;
-    }, 1000);
-  }
+  //   // Reset flag after scrolling
+  //   setTimeout(() => {
+  //     this.isAutoScrolling = false;
+  //   }, 1000);
+  // }
 
   generateTaskPreview(task) {
     const taskDate = new Date(task.date);

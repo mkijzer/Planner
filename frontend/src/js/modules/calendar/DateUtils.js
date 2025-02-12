@@ -1,44 +1,71 @@
-const DAYS = {
-  0: "Sun",
-  1: "Mon",
-  2: "Tue",
-  3: "Wed",
-  4: "Thu",
-  5: "Fri",
-  6: "Sat",
+// Helper function to format date according to the system locale
+export function formatDate(date) {
+  const userLocale = navigator.language || "en-US"; // Use system locale
+
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  const formattedDate = new Date(date).toLocaleDateString(userLocale, options);
+  const weekday = new Date(date).toLocaleDateString(userLocale, {
+    weekday: "long",
+  });
+
+  return `${formattedDate} (${weekday})`;
+}
+
+/*
+  Original code (for fallback):
+  
+  const DAYS = {
+    0: new Date(2024, 0, 7).toLocaleString(undefined, { weekday: "short" }), // Auto-detect system locale
+    1: new Date(2024, 0, 1).toLocaleString(undefined, { weekday: "short" }),
+    2: new Date(2024, 0, 2).toLocaleString(undefined, { weekday: "short" }),
+    3: new Date(2024, 0, 3).toLocaleString(undefined, { weekday: "short" }),
+    4: new Date(2024, 0, 4).toLocaleString(undefined, { weekday: "short" }),
+    5: new Date(2024, 0, 5).toLocaleString(undefined, { weekday: "short" }),
+    6: new Date(2024, 0, 6).toLocaleString(undefined, { weekday: "short" }),
+  };
+*/
+
+// Refactored DAYS object using `formatDate`:
+export const DAYS = {
+  0: formatDate(new Date(2024, 0, 7)),
+  1: formatDate(new Date(2024, 0, 1)),
+  2: formatDate(new Date(2024, 0, 2)),
+  3: formatDate(new Date(2024, 0, 3)),
+  4: formatDate(new Date(2024, 0, 4)),
+  5: formatDate(new Date(2024, 0, 5)),
+  6: formatDate(new Date(2024, 0, 6)),
 };
 
-const TIME_SLOTS = [
-  { display: "6:00 AM", hour: 6 },
-  { display: "7:00 AM", hour: 7 },
-  { display: "8:00 AM", hour: 8 },
-  { display: "9:00 AM", hour: 9 },
-  { display: "10:00 AM", hour: 10 },
-  { display: "11:00 AM", hour: 11 },
-  { display: "12:00 PM", hour: 12 },
-  { display: "1:00 PM", hour: 13 },
-  { display: "2:00 PM", hour: 14 },
-  { display: "3:00 PM", hour: 15 },
-  { display: "4:00 PM", hour: 16 },
-  { display: "5:00 PM", hour: 17 },
-  { display: "6:00 PM", hour: 18 },
-  { display: "7:00 PM", hour: 19 },
-  { display: "8:00 PM", hour: 20 },
-  { display: "9:00 PM", hour: 21 },
-  { display: "10:00 PM", hour: 22 },
-  { display: "11:00 PM", hour: 23 },
-  { display: "12:00 AM", hour: 0 },
-  { display: "1:00 AM", hour: 1 },
-  { display: "2:00 AM", hour: 2 },
-  { display: "3:00 AM", hour: 3 },
-  { display: "4:00 AM", hour: 4 },
-  { display: "5:00 AM", hour: 5 },
-].map((slot) => ({
-  ...slot,
-  value: `${String(slot.hour).padStart(2, "0")}:00`,
-}));
+/*
+  Original code (for fallback):
+  
+  const TIME_SLOTS = Array.from({ length: 24 }, (_, i) => {
+    const time = new Date(2024, 0, 1, i); // Example date with hour `i`
+    return {
+      display: time.toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+      }), // Auto-detect 12h or 24h format based on locale
+      hour: i,
+      value: `${String(i).padStart(2, "0")}:00`,
+    };
+  });
+*/
 
-// Get the start of the week (Monday) for a given date
+// Refactored TIME_SLOTS using locale-aware formatting:
+export const TIME_SLOTS = Array.from({ length: 24 }, (_, i) => {
+  const time = new Date(2024, 0, 1, i); // Example date with hour `i`
+  return {
+    display: time.toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+    }), // Auto-detect 12h or 24h format based on locale
+    hour: i,
+    value: `${String(i).padStart(2, "0")}:00`,
+  };
+});
+
+// Function to get the start of the week based on a given date
 export function getWeekStart(date) {
   const newDate = new Date(date);
   const day = newDate.getDay();
@@ -46,12 +73,20 @@ export function getWeekStart(date) {
   return new Date(newDate.setDate(diff));
 }
 
-// Format day header
+/*
+  Original code (for fallback):
+  
+  export function formatDayHeader(date) {
+    return date.toLocaleString(undefined, { weekday: "short" }); // Use system locale
+  }
+*/
+
+// Refactored formatDayHeader to use `formatDate`
 export function formatDayHeader(date) {
-  return date.toLocaleString("en-US", { weekday: "short" });
+  return formatDate(date); // Use formatDate to get the full formatted string
 }
 
-// Check if a date is today
+// Function to check if the given date is today
 export function isToday(date) {
   const today = new Date();
   return (
@@ -61,38 +96,50 @@ export function isToday(date) {
   );
 }
 
-// Generate time slots (6:00 AM to 9:00 PM)
+// Function to generate time slots for a specific range, based on the locale settings
 export function generateTimeSlots() {
   const slots = [];
   for (let i = 6; i <= 21; i++) {
-    const hour = i % 12 || 12;
-    const period = i < 12 ? "AM" : "PM";
-    slots.push(`${hour}:00 ${period}`);
+    const time = new Date(2024, 0, 1, i); // Example date with hour `i`
+    slots.push(
+      time.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+    );
   }
   return slots;
 }
 
-// Get hour from time slot index
+// Function to get the hour from a given time slot index
 export const getHourFromTimeSlot = (index) => {
-  return index + 6; // Simplify since we start at 6 AM
+  return index + 6;
 };
 
-// Format time for display
+/*
+  Original code (for fallback):
+  
+  // Fix formatTime to use locale-aware formatting instead of hardcoded AM/PM
+  export function formatTime(date) {
+    return new Date(date).toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+*/
+
+// Refactored formatTime to use locale-aware formatting
 export function formatTime(date) {
-  const dateObj = new Date(date);
-  const hours = dateObj.getHours();
-  const minutes = dateObj.getMinutes();
-  const period = hours >= 12 ? "PM" : "AM";
-  const displayHours = hours % 12 || 12;
-  return `${displayHours}:${minutes.toString().padStart(2, "0")} ${period}`;
+  return new Date(date).toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
 
-// Add to your existing DateUtils.js
+// Function to format the date for the database (ISO format)
 export function formatDateForDB(date) {
   const dateObj = new Date(date);
-  return dateObj.toISOString();
+  return dateObj.toISOString(); // Standardized format for DB
 }
 
+// Function to parse a date string from the database back into a Date object
 export function formatDateFromDB(dateString) {
-  return new Date(dateString);
+  return new Date(dateString); // Parse the DB date string back to a Date object
 }
