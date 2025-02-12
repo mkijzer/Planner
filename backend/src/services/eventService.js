@@ -6,26 +6,26 @@ if (process.env.NODE_ENV !== "production") {
   globalThis.prisma = prisma;
 }
 
-const taskService = {
+const eventService = {
   // Keep your existing methods but add better error messages
-  async getAllTasks() {
+  async getAllEvents() {
     try {
-      const tasks = await prisma.task.findMany({
+      const events = await prisma.event.findMany({
         orderBy: { date: "asc" }, // Add sorting
       });
-      return tasks.map((task) => ({
-        ...task,
-        tags: task.tags ? JSON.parse(task.tags) : [],
+      return events.map((event) => ({
+        ...event,
+        tags: event.tags ? JSON.parse(event.tags) : [],
       }));
     } catch (error) {
-      console.error("Database error in getAllTasks:", error);
-      throw new Error("Failed to fetch tasks");
+      console.error("Database error in getAllEvents:", error);
+      throw new Error("Failed to fetch events");
     }
   },
 
-  async createTask(data) {
+  async createEvent(data) {
     try {
-      console.log("Creating task with data:", JSON.stringify(data, null, 2));
+      console.log("Creating event with data:", JSON.stringify(data, null, 2));
 
       // Validate required fields
       if (!data.title) {
@@ -35,7 +35,7 @@ const taskService = {
         throw new Error("Date is required");
       }
 
-      const taskData = {
+      const eventData = {
         title: data.title,
         date: new Date(data.date),
         description: data.notes || "", // Map notes to description
@@ -46,32 +46,32 @@ const taskService = {
           data.tags && data.tags.length > 0 ? JSON.stringify(data.tags) : null,
       };
 
-      console.log("Processed task data:", JSON.stringify(taskData, null, 2));
+      console.log("Processed event data:", JSON.stringify(eventData, null, 2));
 
-      const createdTask = await prisma.task.create({
-        data: taskData,
+      const createdEvent = await prisma.event.create({
+        data: eventData,
       });
 
-      console.log("Created task:", JSON.stringify(createdTask, null, 2));
+      console.log("Created event:", JSON.stringify(createdEvent, null, 2));
 
       return {
-        ...createdTask,
+        ...createdEvent,
         tags: data.tags || [], // Return original tags array
       };
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error("Error creating event:", error);
       throw error;
     }
   },
 
-  async updateTask(id, data) {
+  async updateEvent(id, data) {
     try {
-      const existingTask = await prisma.task.findUnique({ where: { id } });
-      if (!existingTask) {
-        throw new Error("Task not found");
+      const existingEvent = await prisma.event.findUnique({ where: { id } });
+      if (!existingEvent) {
+        throw new Error("Event not found");
       }
 
-      const taskData = {
+      const eventData = {
         title: data.title,
         date: new Date(data.date),
         description: data.notes || "",
@@ -82,50 +82,50 @@ const taskService = {
           data.tags && data.tags.length > 0 ? JSON.stringify(data.tags) : null,
       };
 
-      const updatedTask = await prisma.task.update({
+      const updatedEvent = await prisma.event.update({
         where: { id },
-        data: taskData,
+        data: eventData,
       });
 
       return {
-        ...updatedTask,
+        ...updatedEvent,
         tags: data.tags || [], // Return original tags array
       };
     } catch (error) {
-      console.error("Error updating task:", error);
+      console.error("Error updating event:", error);
       throw error;
     }
   },
 
-  async getTaskById(id) {
+  async getEventById(id) {
     try {
-      const task = await prisma.task.findUnique({ where: { id } });
-      if (!task) {
-        throw new Error("Task not found");
+      const event = await prisma.event.findUnique({ where: { id } });
+      if (!event) {
+        throw new Error("Event not found");
       }
 
       return {
-        ...task,
-        tags: task.tags ? JSON.parse(task.tags) : [],
+        ...event,
+        tags: event.tags ? JSON.parse(event.tags) : [],
       };
     } catch (error) {
-      console.error("Error fetching task by ID:", error);
+      console.error("Error fetching event by ID:", error);
       throw error;
     }
   },
 
-  async deleteTask(id) {
+  async deleteEvent(id) {
     try {
-      const task = await prisma.task.delete({ where: { id } });
-      if (!task) {
-        throw new Error("Task not found");
+      const event = await prisma.event.delete({ where: { id } });
+      if (!event) {
+        throw new Error("Event not found");
       }
-      return task;
+      return event;
     } catch (error) {
-      console.error("Error deleting task:", error);
+      console.error("Error deleting event:", error);
       throw error;
     }
   },
 };
 
-export default taskService;
+export default eventService;

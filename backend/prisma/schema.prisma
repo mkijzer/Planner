@@ -13,7 +13,7 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Task {
+model Event {
   id          String    @id @default(uuid())
   title       String    // Required now
   date        DateTime  // Required for scheduling

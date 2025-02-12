@@ -1,19 +1,19 @@
 // --------------------------------------------------
-// new TaskForm.js
+// new EventForm.js
 // --------------------------------------------------
 
-// src/js/components/tasks/TaskForm.js
+// src/js/components/events/EventForm.js
 import { Component } from "../Component.js";
 
-export class TaskForm extends Component {
-  constructor(container, taskService) {
+export class EventForm extends Component {
+  constructor(container, eventService) {
     super(container, {
       date: null,
-      taskId: null,
-      task: null,
+      eventId: null,
+      event: null,
     });
-    this.taskService = taskService;
-    this.form = container.querySelector("#task-form");
+    this.eventService = eventService;
+    this.form = container.querySelector("#event-form");
   }
 
   setupEventListeners() {
@@ -36,7 +36,7 @@ export class TaskForm extends Component {
     });
 
     // Tags
-    const tagInput = this.container.querySelector("#taskCategory");
+    const tagInput = this.container.querySelector("#eventCategory");
     tagInput?.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && tagInput.value.trim()) {
         e.preventDefault();
@@ -79,50 +79,50 @@ export class TaskForm extends Component {
 
   // Updated to handle async operations
   async handleSubmit() {
-    const taskTitle = this.container.querySelector("#taskTitle").value;
-    if (!taskTitle.trim()) {
-      alert("Task title is required!"); // Notify the user
+    const eventTitle = this.container.querySelector("#eventTitle").value;
+    if (!eventTitle.trim()) {
+      alert("Event title is required!"); // Notify the user
       return;
     }
 
-    const taskData = {
-      id: this.state.taskId || Date.now().toString(),
-      title: taskTitle,
+    const eventData = {
+      id: this.state.eventId || Date.now().toString(),
+      title: eventTitle,
       date: this.state.date,
       priority:
         this.container.querySelector(".priority-btn.selected")?.dataset
           .priority || "low",
       reminder: this.container.querySelector(".reminder-btn.selected")?.dataset
         .time,
-      notes: this.container.querySelector("#taskNotes").value,
+      notes: this.container.querySelector("#eventNotes").value,
       tags: Array.from(this.container.querySelectorAll(".tag")).map(
         (tag) => tag.dataset.value
       ),
     };
 
-    // Set the time for the task
-    const timeInput = this.container.querySelector("#taskTime");
+    // Set the time for the event
+    const timeInput = this.container.querySelector("#eventTime");
     const [hours, minutes] = timeInput.value.split(":").map(Number);
-    taskData.date.setHours(hours, minutes, 0, 0);
+    eventData.date.setHours(hours, minutes, 0, 0);
 
     try {
-      if (this.state.taskId) {
-        // Edit existing task
-        await this.taskService.editTask(taskData);
-        console.log("Task updated successfully!");
+      if (this.state.eventId) {
+        // Edit existing event
+        await this.eventService.editEvent(eventData);
+        console.log("Event updated successfully!");
       } else {
-        // Add new task
-        await this.taskService.addTask(taskData);
-        console.log("Task added successfully!");
+        // Add new event
+        await this.eventService.addEvent(eventData);
+        console.log("Event added successfully!");
       }
 
       // Reset the form and notify the user
       this.resetForm();
-      document.dispatchEvent(new CustomEvent("taskSaved"));
-      alert("Task saved successfully!"); // Notify the user
+      document.dispatchEvent(new CustomEvent("eventSaved"));
+      alert("Event saved successfully!"); // Notify the user
     } catch (error) {
-      console.error("Failed to save task:", error);
-      alert("Failed to save task. Please try again."); // Notify the user
+      console.error("Failed to save event:", error);
+      alert("Failed to save event. Please try again."); // Notify the user
     }
   }
 
@@ -134,55 +134,55 @@ export class TaskForm extends Component {
       .forEach((btn) => btn.classList.remove("selected"));
   }
 
-  setTask(task, date) {
+  setEvent(event, date) {
     this.setState({
-      date: date || new Date(task?.date) || new Date(),
-      taskId: task?.id || null,
-      task: task || null,
+      date: date || new Date(event?.date) || new Date(),
+      eventId: event?.id || null,
+      event: event || null,
     });
 
-    if (task) {
-      this.container.querySelector("#taskTitle").value = task.title;
-      this.container.querySelector("#taskTime").value = new Date(task.date)
+    if (event) {
+      this.container.querySelector("#eventTitle").value = event.title;
+      this.container.querySelector("#eventTime").value = new Date(event.date)
         .toTimeString()
         .slice(0, 5);
-      this.container.querySelector("#taskNotes").value = task.notes || "";
+      this.container.querySelector("#eventNotes").value = event.notes || "";
 
       // Set priority
-      if (task.priority) {
+      if (event.priority) {
         this.container
-          .querySelector(`.priority-btn[data-priority="${task.priority}"]`)
+          .querySelector(`.priority-btn[data-priority="${event.priority}"]`)
           ?.classList.add("selected");
       }
 
       // Set reminder
-      if (task.reminder) {
+      if (event.reminder) {
         this.container
-          .querySelector(`.reminder-btn[data-time="${task.reminder}"]`)
+          .querySelector(`.reminder-btn[data-time="${event.reminder}"]`)
           ?.classList.add("selected");
       }
 
       // Set tags
-      task.tags?.forEach((tag) => this.addTag(tag));
+      event.tags?.forEach((tag) => this.addTag(tag));
     }
   }
 }
 // --------------------------------------------------
-// old TaskForm.js
+// old EventForm.js
 // --------------------------------------------------
 
-// // src/js/components/tasks/TaskForm.js
+// // src/js/components/events/EventForm.js
 // import { Component } from "../Component.js";
 
-// export class TaskForm extends Component {
-//   constructor(container, taskService) {
+// export class EventForm extends Component {
+//   constructor(container, eventService) {
 //     super(container, {
 //       date: null,
-//       taskId: null,
-//       task: null,
+//       eventId: null,
+//       event: null,
 //     });
-//     this.taskService = taskService;
-//     this.form = container.querySelector("#task-form");
+//     this.eventService = eventService;
+//     this.form = container.querySelector("#event-form");
 //   }
 
 //   setupEventListeners() {
@@ -205,7 +205,7 @@ export class TaskForm extends Component {
 //     });
 
 //     // Tags
-//     const tagInput = this.container.querySelector("#taskCategory");
+//     const tagInput = this.container.querySelector("#eventCategory");
 //     tagInput?.addEventListener("keydown", (e) => {
 //       if (e.key === "Enter" && tagInput.value.trim()) {
 //         e.preventDefault();
@@ -247,36 +247,36 @@ export class TaskForm extends Component {
 //   }
 
 //   handleSubmit() {
-//     const taskTitle = this.container.querySelector("#taskTitle").value;
-//     if (!taskTitle.trim()) return;
+//     const eventTitle = this.container.querySelector("#eventTitle").value;
+//     if (!eventTitle.trim()) return;
 
-//     const taskData = {
-//       id: this.state.taskId || Date.now().toString(),
-//       title: taskTitle,
+//     const eventData = {
+//       id: this.state.eventId || Date.now().toString(),
+//       title: eventTitle,
 //       date: this.state.date,
 //       priority:
 //         this.container.querySelector(".priority-btn.selected")?.dataset
 //           .priority || "low",
 //       reminder: this.container.querySelector(".reminder-btn.selected")?.dataset
 //         .time,
-//       notes: this.container.querySelector("#taskNotes").value,
+//       notes: this.container.querySelector("#eventNotes").value,
 //       tags: Array.from(this.container.querySelectorAll(".tag")).map(
 //         (tag) => tag.dataset.value
 //       ),
 //     };
 
-//     const timeInput = this.container.querySelector("#taskTime");
+//     const timeInput = this.container.querySelector("#eventTime");
 //     const [hours, minutes] = timeInput.value.split(":").map(Number);
-//     taskData.date.setHours(hours, minutes, 0, 0);
+//     eventData.date.setHours(hours, minutes, 0, 0);
 
-//     if (this.state.taskId) {
-//       this.taskService.editTask(taskData);
+//     if (this.state.eventId) {
+//       this.eventService.editEvent(eventData);
 //     } else {
-//       this.taskService.addTask(taskData);
+//       this.eventService.addEvent(eventData);
 //     }
 
 //     this.resetForm();
-//     document.dispatchEvent(new CustomEvent("taskSaved"));
+//     document.dispatchEvent(new CustomEvent("eventSaved"));
 //   }
 
 //   resetForm() {
@@ -287,36 +287,36 @@ export class TaskForm extends Component {
 //       .forEach((btn) => btn.classList.remove("selected"));
 //   }
 
-//   setTask(task, date) {
+//   setEvent(event, date) {
 //     this.setState({
-//       date: date || new Date(task?.date) || new Date(),
-//       taskId: task?.id || null,
-//       task: task || null,
+//       date: date || new Date(event?.date) || new Date(),
+//       eventId: event?.id || null,
+//       event: event || null,
 //     });
 
-//     if (task) {
-//       this.container.querySelector("#taskTitle").value = task.title;
-//       this.container.querySelector("#taskTime").value = new Date(task.date)
+//     if (event) {
+//       this.container.querySelector("#eventTitle").value = event.title;
+//       this.container.querySelector("#eventTime").value = new Date(event.date)
 //         .toTimeString()
 //         .slice(0, 5);
-//       this.container.querySelector("#taskNotes").value = task.notes || "";
+//       this.container.querySelector("#eventNotes").value = event.notes || "";
 
 //       // Set priority
-//       if (task.priority) {
+//       if (event.priority) {
 //         this.container
-//           .querySelector(`.priority-btn[data-priority="${task.priority}"]`)
+//           .querySelector(`.priority-btn[data-priority="${event.priority}"]`)
 //           ?.classList.add("selected");
 //       }
 
 //       // Set reminder
-//       if (task.reminder) {
+//       if (event.reminder) {
 //         this.container
-//           .querySelector(`.reminder-btn[data-time="${task.reminder}"]`)
+//           .querySelector(`.reminder-btn[data-time="${event.reminder}"]`)
 //           ?.classList.add("selected");
 //       }
 
 //       // Set tags
-//       task.tags?.forEach((tag) => this.addTag(tag));
+//       event.tags?.forEach((tag) => this.addTag(tag));
 //     }
 //   }
 // }

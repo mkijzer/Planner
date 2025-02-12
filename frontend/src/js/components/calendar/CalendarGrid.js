@@ -8,9 +8,9 @@ import {
 } from "../../modules/calendar/DateUtils.js";
 
 export class CalendarGrid extends Component {
-  constructor(container, taskService) {
+  constructor(container, eventService) {
     super(container);
-    this.taskService = taskService;
+    this.eventService = eventService;
     this.timeSlots = generateTimeSlots();
     this.currentWeekStart = null;
     // this.scrollTimeout = null;
@@ -31,7 +31,7 @@ export class CalendarGrid extends Component {
 
   setupGlobalEventListeners() {
     // Modal state listeners
-    document.addEventListener("openTaskModal", () => {
+    document.addEventListener("openEventModal", () => {
       this.isModalOpen = true;
       // Clear any pending scroll timeouts when modal opens
       // if (this.scrollTimeout) {
@@ -39,20 +39,20 @@ export class CalendarGrid extends Component {
       // }
     });
 
-    document.addEventListener("closeTaskModal", () => {
+    document.addEventListener("closeEventModal", () => {
       this.isModalOpen = false;
       // Start the scroll timeout again after modal closes
       this.startScrollTimeout();
     });
 
-    document.addEventListener("taskSaved", () => {
+    document.addEventListener("eventSaved", () => {
       this.isModalOpen = false;
       setTimeout(() => {
         this.scrollToCurrentTime();
       }, 500);
     });
 
-    document.addEventListener("taskDeleted", () => {
+    document.addEventListener("eventDeleted", () => {
       this.isModalOpen = false;
       setTimeout(() => {
         this.scrollToCurrentTime();
@@ -120,18 +120,18 @@ export class CalendarGrid extends Component {
 
   setupEventListeners() {
     this.container.addEventListener("click", (e) => {
-      if (e.target.closest(".task-preview")) {
-        const taskPreview = e.target.closest(".task-preview");
-        const task = JSON.parse(taskPreview.dataset.task);
+      if (e.target.closest(".event-preview")) {
+        const eventPreview = e.target.closest(".event-preview");
+        const event = JSON.parse(eventPreview.dataset.event);
         document.dispatchEvent(
-          new CustomEvent("openTaskDetails", { detail: { task } })
+          new CustomEvent("openEventDetails", { detail: { event } })
         );
       } else if (e.target.classList.contains("time-cell")) {
         const cell = e.target;
         const date = new Date(cell.dataset.date);
         const hour = parseInt(cell.dataset.hour);
         document.dispatchEvent(
-          new CustomEvent("openTaskModal", { detail: { date, hour } })
+          new CustomEvent("openEventModal", { detail: { date, hour } })
         );
       }
     });
@@ -162,31 +162,31 @@ export class CalendarGrid extends Component {
   //   }, 1000);
   // }
 
-  generateTaskPreview(task) {
-    const taskDate = new Date(task.date);
+  generateEventPreview(event) {
+    const eventDate = new Date(event.date);
     const now = new Date();
 
-    // Determine task timing
-    let taskTiming = "future";
-    if (taskDate < now) {
-      taskTiming = "past";
-    } else if (taskDate <= new Date(now.getTime() + 3 * 3600000)) {
+    // Determine event timing
+    let eventTiming = "future";
+    if (eventDate < now) {
+      eventTiming = "past";
+    } else if (eventDate <= new Date(now.getTime() + 3 * 3600000)) {
       // Next 3 hours
-      taskTiming = "current";
+      eventTiming = "current";
     }
 
     return `
-        <article class="task-preview ${taskTiming}" 
-                data-task-id="${task.id}" 
-                data-task='${JSON.stringify(task)}'>
-            <div class="task-content">
-                <div class="task-title">${task.title}</div>
-                <time class="task-time" datetime="${taskDate.toISOString()}">
-                    ${formatTime(task.date)}
+        <article class="event-preview ${eventTiming}" 
+                data-event-id="${event.id}" 
+                data-event='${JSON.stringify(event)}'>
+            <div class="event-content">
+                <div class="event-title">${event.title}</div>
+                <time class="event-time" datetime="${eventDate.toISOString()}">
+                    ${formatTime(event.date)}
                 </time>
             </div>
-            <div class="task-preview-priority ${task.priority}" 
-                 aria-label="Priority: ${task.priority}">
+            <div class="event-preview-priority ${event.priority}" 
+                 aria-label="Priority: ${event.priority}">
             </div>
         </article>
     `;
@@ -203,14 +203,14 @@ export class CalendarGrid extends Component {
         }
         cellDate.setHours(hour, 0, 0, 0);
 
-        const tasks = this.taskService.getTasksForTimeSlot(cellDate, hour);
-        const taskHTML = tasks
-          .map((task) => this.generateTaskPreview(task))
+        const events = this.eventService.getEventsForTimeSlot(cellDate, hour);
+        const eventHTML = events
+          .map((event) => this.generateEventPreview(event))
           .join("");
 
         return `
                     <div class="time-cell" data-date="${cellDate.toISOString()}" data-hour="${hour}">
-                        ${taskHTML}
+                        ${eventHTML}
                     </div>
                 `;
       })

@@ -11,6 +11,6 @@
 
 /* Component styles last */
 @import "components/calendar.css";
-@import "components/TaskModal.css";
+@import "components/EventModal.css";
 @import "components/mini-calendar.css";
-@import "components/task-list.css";
+@import "components/event-list.css";

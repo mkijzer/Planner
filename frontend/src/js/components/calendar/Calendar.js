@@ -5,16 +5,16 @@ import { CalendarHeader } from "./CalendarHeader.js";
 import { getWeekStart, formatTime } from "../../modules/calendar/DateUtils.js";
 
 export class Calendar extends Component {
-  constructor(container, taskService) {
+  constructor(container, eventService) {
     super(container);
-    this.taskService = taskService;
+    this.eventService = eventService;
     this.currentWeekStart = getWeekStart(new Date());
     this.state = {
       currentWeekStart: this.currentWeekStart,
     };
 
     this.initialize();
-    this.setupTaskListener();
+    this.setupEventListener();
   }
 
   initialize() {
@@ -37,15 +37,15 @@ export class Calendar extends Component {
     }
 
     this.header = new CalendarHeader(headerContainer);
-    this.grid = new CalendarGrid(gridContainer, this.taskService);
+    this.grid = new CalendarGrid(gridContainer, this.eventService);
     this.updateComponents();
   }
 
-  setupTaskListener() {
-    // Listen to task changes
-    this.taskService.addListener(() => {
+  setupEventListener() {
+    // Listen to event changes
+    this.eventService.addListener(() => {
       this.grid.render();
-      this.updateTodayTasks();
+      this.updateTodayEvents();
     });
 
     // Listen to week changes
@@ -60,21 +60,21 @@ export class Calendar extends Component {
     this.grid.setState({ currentWeekStart: this.currentWeekStart });
   }
 
-  updateTodayTasks() {
-    const todayContainer = document.querySelector(".today-tasks");
+  updateTodayEvents() {
+    const todayContainer = document.querySelector(".today-events");
     if (!todayContainer) return;
 
-    const todayTasks = this.taskService.getTodayTasks();
-    todayContainer.innerHTML = todayTasks
-      .map((task) => {
-        const taskDate = new Date(task.date);
+    const todayEvents = this.eventService.getTodayEvents();
+    todayContainer.innerHTML = todayEvents
+      .map((event) => {
+        const eventDate = new Date(event.date);
         return `
-          <article class="sidebar-task-preview" data-task='${JSON.stringify(
-            task
+          <article class="sidebar-event-preview" data-event='${JSON.stringify(
+            event
           )}'>
-            <h4 class="task-title">${task.title}</h4>
-            <time class="task-time" datetime="${taskDate.toISOString()}">
-              ${formatTime(task.date)}
+            <h4 class="event-title">${event.title}</h4>
+            <time class="event-time" datetime="${eventDate.toISOString()}">
+              ${formatTime(event.date)}
             </time>
           </article>
         `;
@@ -84,11 +84,11 @@ export class Calendar extends Component {
     console.log("Calendar initializing with container:", this.container);
 
     todayContainer.addEventListener("click", (e) => {
-      const taskPreview = e.target.closest(".sidebar-task-preview");
-      if (taskPreview) {
-        const task = JSON.parse(taskPreview.dataset.task);
+      const eventPreview = e.target.closest(".sidebar-event-preview");
+      if (eventPreview) {
+        const event = JSON.parse(eventPreview.dataset.event);
         document.dispatchEvent(
-          new CustomEvent("openTaskDetails", { detail: { task } })
+          new CustomEvent("openEventDetails", { detail: { event } })
         );
       }
     });

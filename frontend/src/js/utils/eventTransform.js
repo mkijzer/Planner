@@ -1,10 +1,10 @@
-// src/js/utils/taskTransform.js
+// src/js/utils/eventTransform.js
 import {
   formatDateForDB,
   formatDateFromDB,
 } from "../modules/calendar/DateUtils.js";
 
-export const transformTaskForDB = (data) => ({
+export const transformEventForDB = (data) => ({
   title: data.title,
   date: formatDateForDB(data.date),
   description: data.notes || "",
@@ -14,9 +14,9 @@ export const transformTaskForDB = (data) => ({
   tags: data.tags ? JSON.stringify(data.tags) : null,
 });
 
-export const transformTaskFromDB = (task) => ({
-  ...task,
-  date: formatDateFromDB(task.date),
-  notes: task.description,
-  tags: task.tags ? JSON.parse(task.tags) : [],
+export const transformEventFromDB = (event) => ({
+  ...event,
+  date: formatDateFromDB(event.date),
+  notes: event.description,
+  tags: event.tags ? JSON.parse(event.tags) : [],
 });

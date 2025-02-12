@@ -1,20 +1,20 @@
 import { formatTime } from "../../modules/calendar/DateUtils.js";
 
-export class TaskModal {
-  constructor(taskManager) {
-    this.taskManager = taskManager;
-    this.modal = document.getElementById("taskModal");
-    this.tasksView = document.getElementById("tasks-view");
-    this.addTaskForm = document.getElementById("add-task-form");
+export class EventModal {
+  constructor(eventManager) {
+    this.eventManager = eventManager;
+    this.modal = document.getElementById("eventModal");
+    this.eventsView = document.getElementById("events-view");
+    this.addEventForm = document.getElementById("add-event-form");
 
     // Update element references to match new HTML
     this.modalHeading = document.getElementById("modal-heading");
-    this.taskDateEl = document.getElementById("task-date");
-    this.taskTimeEl = document.getElementById("task-time");
-    this.taskReminder = document.getElementById("task-reminder");
-    this.taskNotes = document.getElementById("task-notes");
+    this.eventDateEl = document.getElementById("event-date");
+    this.eventTimeEl = document.getElementById("event-time");
+    this.eventReminder = document.getElementById("event-reminder");
+    this.eventNotes = document.getElementById("event-notes");
 
-    if (!this.modal || !this.tasksView || !this.addTaskForm) {
+    if (!this.modal || !this.eventsView || !this.addEventForm) {
       console.error("Required modal elements not found");
       return;
     }
@@ -29,38 +29,40 @@ export class TaskModal {
   }
 
   setupEventListeners() {
-    document.addEventListener("openTaskModal", (e) => {
+    document.addEventListener("openEventModal", (e) => {
       const { date, hour } = e.detail;
-      this.openTaskModal(date, hour);
+      this.openEventModal(date, hour);
     });
 
-    document.addEventListener("editTask", (e) => {
-      const { task } = e.detail;
-      this.openEditForm(task);
+    document.addEventListener("editEvent", (e) => {
+      const { event } = e.detail;
+      this.openEditForm(event);
     });
 
-    document.addEventListener("deleteTask", (e) => {
-      const { taskId } = e.detail;
-      if (confirm("Are you sure you want to delete this task?")) {
-        this.taskManager.deleteTask(taskId);
+    document.addEventListener("deleteEvent", (e) => {
+      const { eventId } = e.detail;
+      if (confirm("Are you sure you want to delete this event?")) {
+        this.eventManager.deleteEvent(eventId);
         this.closeModal();
       }
     });
 
-    document.addEventListener("openTaskDetails", (e) => {
-      const { task } = e.detail;
-      this.openTaskDetails(task);
+    document.addEventListener("openEventDetails", (e) => {
+      const { event } = e.detail;
+      this.openEventDetails(event);
     });
 
-    document.getElementById("show-task-form")?.addEventListener("click", () => {
-      this.showTaskForm();
-    });
+    document
+      .getElementById("show-event-form")
+      ?.addEventListener("click", () => {
+        this.showEventForm();
+      });
 
-    const taskForm = document.getElementById("task-form");
-    if (taskForm) {
-      taskForm.addEventListener("submit", (e) => {
+    const eventForm = document.getElementById("event-form");
+    if (eventForm) {
+      eventForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        this.handleTaskSubmit();
+        this.handleEventSubmit();
       });
     }
   }
@@ -92,7 +94,7 @@ export class TaskModal {
       });
     }
 
-    const tagInput = document.getElementById("taskCategory");
+    const tagInput = document.getElementById("eventCategory");
     tagInput?.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && tagInput.value.trim()) {
         e.preventDefault();
@@ -128,18 +130,18 @@ export class TaskModal {
     this.resetForm();
   }
 
-  showTaskForm() {
-    this.tasksView.classList.add("hidden");
-    this.addTaskForm.classList.remove("hidden");
+  showEventForm() {
+    this.eventsView.classList.add("hidden");
+    this.addEventForm.classList.remove("hidden");
   }
 
-  showTaskDetails() {
-    this.tasksView.classList.remove("hidden");
-    this.addTaskForm.classList.add("hidden");
+  showEventDetails() {
+    this.eventsView.classList.remove("hidden");
+    this.addEventForm.classList.add("hidden");
   }
 
   resetForm() {
-    const form = document.getElementById("task-form");
+    const form = document.getElementById("event-form");
     if (form) {
       form.reset();
       document.getElementById("selectedTags").innerHTML = "";
@@ -149,164 +151,166 @@ export class TaskModal {
     }
   }
 
-  openTaskModal(date, hour) {
+  openEventModal(date, hour) {
     this._currentDate = date;
     this.resetForm();
 
-    const taskTimeInput = document.getElementById("taskTime");
-    if (taskTimeInput) {
+    const eventTimeInput = document.getElementById("eventTime");
+    if (eventTimeInput) {
       const hourStr = hour.toString().padStart(2, "0");
-      taskTimeInput.value = `${hourStr}:00`;
+      eventTimeInput.value = `${hourStr}:00`;
     }
 
-    if (this.taskDateEl) {
-      this.taskDateEl.textContent = this.formatDate(date);
+    if (this.eventDateEl) {
+      this.eventDateEl.textContent = this.formatDate(date);
     }
-    if (this.taskTimeEl) {
-      this.taskTimeEl.textContent = formatTime(new Date().setHours(hour, 0, 0));
+    if (this.eventTimeEl) {
+      this.eventTimeEl.textContent = formatTime(
+        new Date().setHours(hour, 0, 0)
+      );
     }
 
-    this.showTaskForm();
+    this.showEventForm();
     this.showModal();
   }
 
-  openTaskDetails(task) {
+  openEventDetails(event) {
     if (this.modalHeading) {
-      this.modalHeading.textContent = task.title;
+      this.modalHeading.textContent = event.title;
     }
 
-    const date = new Date(task.date);
+    const date = new Date(event.date);
 
-    if (this.taskDateEl) {
-      this.taskDateEl.textContent = this.formatDate(date);
+    if (this.eventDateEl) {
+      this.eventDateEl.textContent = this.formatDate(date);
     }
-    if (this.taskTimeEl) {
-      this.taskTimeEl.textContent = formatTime(task.date);
+    if (this.eventTimeEl) {
+      this.eventTimeEl.textContent = formatTime(event.date);
     }
-    if (this.taskNotes) {
-      this.taskNotes.textContent = task.notes || "No notes added";
+    if (this.eventNotes) {
+      this.eventNotes.textContent = event.notes || "No notes added";
     }
 
     // Setup edit/delete buttons
     const editBtn = this.modal.querySelector(".edit-btn");
     const deleteBtn = this.modal.querySelector(".delete-btn");
 
-    editBtn?.addEventListener("click", () => this.openEditForm(task));
+    editBtn?.addEventListener("click", () => this.openEditForm(event));
     deleteBtn?.addEventListener("click", () => {
-      if (confirm("Are you sure you want to delete this task?")) {
-        this.taskManager.deleteTask(task.id);
+      if (confirm("Are you sure you want to delete this event?")) {
+        this.eventManager.deleteEvent(event.id);
         this.closeModal();
       }
     });
 
-    this.showTaskDetails();
+    this.showEventDetails();
     this.showModal();
   }
 
-  openEditForm(task) {
-    // Store current task data for editing
-    this._currentTaskId = task.id;
-    this._currentDate = new Date(task.date);
+  openEditForm(event) {
+    // Store current event data for editing
+    this._currentEventId = event.id;
+    this._currentDate = new Date(event.date);
 
     // Update modal header
     if (this.modalHeading) {
-      this.modalHeading.textContent = "Edit Task";
+      this.modalHeading.textContent = "Edit Event";
     }
 
-    // Populate form with task data
-    document.getElementById("taskTitle").value = task.title;
-    document.getElementById("taskTime").value = new Date(task.date)
+    // Populate form with event data
+    document.getElementById("eventTitle").value = event.title;
+    document.getElementById("eventTime").value = new Date(event.date)
       .toTimeString()
       .slice(0, 5);
-    document.getElementById("taskNotes").value = task.notes || "";
+    document.getElementById("eventNotes").value = event.notes || "";
 
     // Set priority
-    if (task.priority) {
+    if (event.priority) {
       document
-        .querySelector(`.priority-btn[data-priority="${task.priority}"]`)
+        .querySelector(`.priority-btn[data-priority="${event.priority}"]`)
         ?.classList.add("selected");
     }
 
     // Set reminder
-    if (task.reminder) {
+    if (event.reminder) {
       document
-        .querySelector(`.reminder-btn[data-time="${task.reminder}"]`)
+        .querySelector(`.reminder-btn[data-time="${event.reminder}"]`)
         ?.classList.add("selected");
     }
 
     // Set tags
     const tagsContainer = document.getElementById("selectedTags");
     tagsContainer.innerHTML = "";
-    task.tags?.forEach((tag) => this.addTag(tag));
+    event.tags?.forEach((tag) => this.addTag(tag));
 
     // Update form submission handler for edit mode
-    const taskForm = document.getElementById("task-form");
-    if (taskForm) {
-      taskForm.onsubmit = (e) => {
+    const eventForm = document.getElementById("event-form");
+    if (eventForm) {
+      eventForm.onsubmit = (e) => {
         e.preventDefault();
-        this.handleEditSubmit(this._currentTaskId);
+        this.handleEditSubmit(this._currentEventId);
       };
     }
 
     // Show form
-    this.showTaskForm();
+    this.showEventForm();
     this.showModal();
   }
 
-  handleTaskSubmit() {
-    const taskTitle = document.getElementById("taskTitle").value;
-    if (!taskTitle.trim()) return;
+  handleEventSubmit() {
+    const eventTitle = document.getElementById("eventTitle").value;
+    if (!eventTitle.trim()) return;
 
-    const taskData = {
+    const eventData = {
       id: Date.now().toString(),
-      title: taskTitle,
+      title: eventTitle,
       date: new Date(this._currentDate),
       priority:
         document.querySelector(".priority-btn.selected")?.dataset.priority ||
         "low",
       reminder: document.querySelector(".reminder-btn.selected")?.dataset.time,
-      notes: document.getElementById("taskNotes").value,
+      notes: document.getElementById("eventNotes").value,
       tags: Array.from(document.querySelectorAll(".tag")).map(
         (tag) => tag.dataset.value
       ),
     };
 
-    const timeInput = document.getElementById("taskTime");
+    const timeInput = document.getElementById("eventTime");
     if (timeInput?.value) {
       const [hours, minutes] = timeInput.value.split(":").map(Number);
-      taskData.date.setHours(hours, minutes);
+      eventData.date.setHours(hours, minutes);
     }
 
-    this.taskManager.addTask(taskData);
+    this.eventManager.addEvent(eventData);
     this.closeModal();
   }
 
-  handleEditSubmit(taskId) {
-    const taskTitle = document.getElementById("taskTitle").value;
-    if (!taskTitle.trim()) return;
+  handleEditSubmit(eventId) {
+    const eventTitle = document.getElementById("eventTitle").value;
+    if (!eventTitle.trim()) return;
 
-    const taskDate = new Date(this._currentDate);
-    const timeInput = document.getElementById("taskTime");
+    const eventDate = new Date(this._currentDate);
+    const timeInput = document.getElementById("eventTime");
     if (timeInput?.value) {
       const [hours, minutes] = timeInput.value.split(":").map(Number);
-      taskDate.setHours(hours, minutes);
+      eventDate.setHours(hours, minutes);
     }
 
-    const taskData = {
-      id: taskId,
-      title: taskTitle,
-      date: taskDate,
+    const eventData = {
+      id: eventId,
+      title: eventTitle,
+      date: eventDate,
       priority:
         document.querySelector(".priority-btn.selected")?.dataset.priority ||
         "low",
       reminder: document.querySelector(".reminder-btn.selected")?.dataset.time,
-      notes: document.getElementById("taskNotes").value,
+      notes: document.getElementById("eventNotes").value,
       tags: Array.from(document.querySelectorAll(".tag")).map(
         (tag) => tag.dataset.value
       ),
     };
 
-    this.taskManager.updateTask(taskId, taskData);
+    this.eventManager.updateEvent(eventId, eventData);
     this.closeModal();
   }
 

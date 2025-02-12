@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import taskRoutes from "./src/routes/taskRoutes.js";
+import eventRoutes from "./src/routes/eventRoutes.js";
 import errorHandler from "./src/middleware/errorHandler.js";
 
 dotenv.config();
@@ -35,8 +35,8 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "API is working" });
 });
 
-// Task routes
-app.use("/api/tasks", taskRoutes);
+// Event routes
+app.use("/api/events", eventRoutes);
 
 // 404 handler for undefined routes
 app.use((req, res, next) => {
