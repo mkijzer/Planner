@@ -39,7 +39,7 @@
   transition: opacity 0.3s ease;
 }
 
-/* theme Toggle*/
+/* Add to your existing header.css */
 .theme-toggle-container {
   display: flex;
   gap: 0.5rem;

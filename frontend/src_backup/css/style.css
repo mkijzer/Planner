@@ -8,7 +8,6 @@
 @import "layout/header.css";
 @import "layout/aside.css";
 @import "layout/main.css";
-@import "themes/darkMode.css";
 
 /* Component styles last */
 @import "components/calendar.css";

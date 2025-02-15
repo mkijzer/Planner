@@ -3,9 +3,6 @@ import { MiniCalendar } from "./components/mini-calendar/MiniCalendar.js";
 import { EventService } from "./services/EventService.js";
 import { EventList } from "./components/events/EventList.js";
 import { EventModal } from "./components/events/EventModal.js";
-import { ThemeManager } from "./utils/themeManager.js";
-
-new ThemeManager();
 
 class EventManager {
   constructor(eventService) {
@@ -51,6 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const miniCalendarContainer = document.querySelector(".mini-calendar");
   if (miniCalendarContainer) {
-    new MiniCalendar(miniCalendarContainer, calendar, eventService);
+    new MiniCalendar(miniCalendarContainer, calendar);
   }
 });

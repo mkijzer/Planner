@@ -1,0 +1,41 @@
+/* RESET.CSS */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-main);
+  line-height: 1.6;
+  background-color: var(--gray);
+  color: var(--text-dark);
+}
+
+/* Base heading styles */
+h1,
+h2 {
+  font-family: var(--font-accent);
+  color: var(--brown);
+  margin-bottom: var(--spacing-md);
+}
+
+h1 {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: var(--text-xl);
+  font-weight: 400;
+}
+
+h3 {
+  font-size: var(--text-lg);
+  font-weight: 200;
+}

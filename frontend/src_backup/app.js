@@ -1,11 +1,12 @@
-import { Calendar } from "./components/calendar/Calendar.js";
-import { MiniCalendar } from "./components/mini-calendar/MiniCalendar.js";
+// frontend/src/app.js
+import { Calendar } from "./components/Calendar/Calendar.js";
+import { MiniCalendar } from "./components/Calendar/MiniCalendar.js";
 import { EventService } from "./services/EventService.js";
-import { EventList } from "./components/events/EventList.js";
-import { EventModal } from "./components/events/EventModal.js";
-import { ThemeManager } from "./utils/themeManager.js";
+import { EventList } from "./components/Events/EventList.js";
+import { EventModal } from "./components/Events/EventModal.js";
 
-new ThemeManager();
+
+document.addEventListener('DOMContentLoaded', () => {
 
 class EventManager {
   constructor(eventService) {

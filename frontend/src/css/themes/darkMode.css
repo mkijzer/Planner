@@ -1,0 +1,26 @@
+/* Dark mode variables */
+[data-theme="dark"] {
+  /* Main Colors */
+  --cream: #1a1a1a;
+  --brown: #e0e0e0;
+  --gray: #333333;
+  --orange: #ff9800;
+
+  /* Component Colors */
+  --header-bg: #242424;
+  --main-bg: #1a1a1a;
+  --text-dark: rgba(255, 255, 255, 0.9);
+  --text-light: #1a1a1a;
+
+  /* Neumorphic properties for dark theme */
+  --shadow-light: rgba(255, 255, 255, 0.05);
+  --shadow-dark: rgba(0, 0, 0, 0.5);
+
+  /* Additional dark mode adjustments */
+  --neu-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
+    -2px -2px 4px rgba(255, 255, 255, 0.05);
+
+  /* Event colors for dark mode */
+  --event-bg: #2a2a2a;
+  --event-border: #333333;
+}

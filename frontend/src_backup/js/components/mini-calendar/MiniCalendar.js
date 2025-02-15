@@ -2,39 +2,14 @@
 import { Component } from "../../components/Component.js";
 
 export class MiniCalendar extends Component {
-  constructor(container, calendar, eventService) {
-    // Add eventService parameter
+  constructor(container, calendar) {
     const initialState = {
       currentDate: new Date(),
       selectedDate: new Date(),
-      events: [], // Add events to state
     };
 
     super(container, initialState);
     this.calendar = calendar;
-    this.eventService = eventService; // Store eventService
-    this.loadEvents(); // Load events when component is created
-  }
-
-  async loadEvents() {
-    try {
-      const events = await this.eventService.getAllEvents();
-      this.setState({ events: events });
-    } catch (error) {
-      console.error("Error loading events:", error);
-    }
-  }
-
-  // Add method to check if date has events
-  hasEvents(date) {
-    return this.state.events.some((event) => {
-      const eventDate = new Date(event.date);
-      return (
-        eventDate.getDate() === date.getDate() &&
-        eventDate.getMonth() === date.getMonth() &&
-        eventDate.getFullYear() === date.getFullYear()
-      );
-    });
   }
 
   render() {
@@ -85,20 +60,16 @@ export class MiniCalendar extends Component {
       const date = new Date(year, month, day);
       const isToday = this.isToday(date);
       const isSelected = this.isSelected(date);
-      const hasEvents = this.hasEvents(date);
 
       html += `
-          <time 
-              class="mini-calendar-day${isToday ? " today" : ""}${
+     <time 
+       class="mini-calendar-day${isToday ? " today" : ""}${
         isSelected ? " selected" : ""
       }"
-              datetime="${date.toISOString().slice(0, 10)}"
-              aria-label="${date.toLocaleDateString()}"
-              data-date="${date.toISOString()}"
-          >
-              ${day}
-              ${hasEvents ? '<span class="event-dot"></span>' : ""}
-          </time>`;
+       datetime="${date.toISOString().slice(0, 10)}"
+       aria-label="${date.toLocaleDateString()}"
+       data-date="${date.toISOString()}"
+     >${day}</time>`;
     }
 
     // Next month days

@@ -138,19 +138,3 @@
     height: 1.4rem;
   }
 }
-
-/* Add these styles to your mini-calendar.css */
-.mini-calendar-day {
-  position: relative; /* Add this to position the dot */
-}
-
-.event-dot {
-  position: absolute;
-  bottom: 2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: var(--orange);
-}

@@ -1,6 +1,5 @@
 /* Base - fundamental styles */
 @import "base/variables.css";
-@import "themes/darkMode.css";
 @import "base/reset.css";
 
 /* Layout - major page sections */

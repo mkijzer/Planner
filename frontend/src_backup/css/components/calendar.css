@@ -1,0 +1,332 @@
+/* ======================
+  Calendar Layout
+  ====================== */
+.month-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 150px); /* Adjust if needed based on your header */
+  overflow: hidden;
+  z-index: 1;
+  margin-top: 7px;
+  margin-left: 7px;
+  padding: var(--spacing-md);
+  background: var(--cream);
+  border-radius: var(--neu-radius);
+  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+}
+
+.month-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+}
+
+.month-nav-title {
+  font-family: var(--font-accent);
+  font-size: var(--text-2xl);
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.month-nav-prev,
+.month-nav-next {
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: 0 1rem;
+  background: var(--cream);
+  color: var(--text-dark);
+  border: none;
+  border-radius: var(--neu-radius);
+  cursor: pointer;
+  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+  transition: all 0.2s ease;
+}
+
+.month-nav-prev:hover,
+.month-nav-next:hover {
+  box-shadow: 1px 1px 2px var(--shadow-dark), -1px -1px 2px var(--shadow-light);
+}
+
+.month-nav-prev:active,
+.month-nav-next:active {
+  box-shadow: inset 2px 2px 4px var(--shadow-dark),
+    inset -2px -2px 4px var(--shadow-light);
+}
+
+.calendar-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--cream);
+  margin-bottom: 20px;
+  padding-top: 15px;
+}
+
+.calendar-weekdays {
+  padding-top: 15px; /* Add more padding at the top */
+  margin-bottom: 15px; /* Space between weekdays and calendar grid */
+}
+
+/* ======================
+       Calendar Grid
+       ====================== */
+
+.calendar-container {
+  position: relative;
+  z-index: 1;
+  height: calc(100vh - 160px); /* Account for header and padding */
+  overflow: hidden;
+}
+
+.calendar-grid {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Update the calendar-grid-days class */
+/* Calendar grid - only this should scroll */
+.calendar-grid-days {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: grid;
+  grid-template-columns: auto repeat(7, 1fr);
+  gap: 1px;
+  position: relative;
+  border: none;
+  padding: var(--spacing-md);
+  border-radius: var(--neu-radius);
+  box-shadow: inset 2px 2px 4px var(--shadow-dark),
+    inset -2px -2px 4px var(--shadow-light);
+}
+
+/* Prevent body scroll when hovering over calendar */
+.calendar-grid-days:hover {
+  overflow-y: scroll;
+}
+
+.time-column {
+  position: sticky;
+  left: 0;
+  z-index: 12;
+  background: var(--cream);
+}
+
+/* Time slots */
+.time-slot {
+  height: 60px; /* Increased height */
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: var(--spacing-sm);
+  font-size: var(--text-xs);
+  color: var(--text-dark);
+}
+
+.day-column {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-header {
+  position: sticky;
+  top: -16px;
+  z-index: 11;
+  background-color: var(--cream);
+  color: var(--text-dark);
+  padding: var(--spacing-sm);
+  text-align: center;
+  font-weight: 500;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.current-day .day-header {
+  color: var(--orange);
+}
+
+.week-grid {
+  height: calc(100vh - 250px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-header {
+  flex-shrink: 0; /* Prevents header from shrinking */
+}
+
+.time-cell {
+  height: 60px;
+  min-height: 60px;
+  position: relative;
+  border-bottom: 1px solid rgba(161, 117, 107, 0.1);
+  padding: var(--spacing-sm);
+  background: var(--cream);
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: var(--neu-radius);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.time-cell:hover {
+  background: var(--cream);
+  box-shadow: inset 3px 3px 6px var(--shadow-dark),
+    inset -3px -3px 6px var(--shadow-light);
+  border-radius: var(--neu-radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.events-container {
+  margin-top: 30px; /* Additional space from calendar header */
+}
+
+/* ======================
+       Task Cards
+       ====================== */
+.event-preview {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--cream);
+  border: 2px solid var(--orange);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 2px;
+  height: 56px;
+  min-width: 130px;
+  max-width: 130px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.event-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.event-preview:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+.event-preview:active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-title {
+  color: var(--text-dark);
+  font-size: 13px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: normal;
+  width: 100%;
+}
+
+.event-time {
+  color: var(--text-dark);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.event-preview.low {
+  background: #deb887;
+}
+
+.event-preview.medium {
+  background: #e4a872;
+}
+
+.event-preview.high {
+  background: var(--orange);
+}
+
+/* ======================
+       Monthly Overview
+       ====================== */
+.month-overview {
+  display: flex;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.month-overview-goals {
+  background-color: var(--cream);
+  padding: var(--spacing-md);
+  border-radius: var(--neu-radius);
+  box-shadow: inset 3px 3px 6px var(--shadow-dark),
+    inset -3px -3px 6px var(--shadow-light);
+}
+
+.month-overview-goals,
+.month-overview-stats {
+  flex: 1;
+  background-color: var(--cream);
+  padding: var(--spacing-md);
+  border-radius: 4px;
+}
+
+.month-overview h2 {
+  font-family: var(--font-accent);
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--text-lg);
+}
+
+/* ======================
+       Scrollbar Styling
+       ====================== */
+.calendar-grid-days::-webkit-scrollbar {
+  width: 8px;
+}
+
+.calendar-grid-days::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.calendar-grid-days::-webkit-scrollbar-thumb {
+  background: var(--brown);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+.calendar-body {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: auto repeat(7, 1fr);
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px; /* Fixed height for footer */
+  z-index: 10; /* Ensure footer stays on top */
+  background: var(--cream); /* Match your theme */
+  box-shadow: 0 -2px 4px var(--shadow-dark); /* Optional: adds subtle shadow */
+}

@@ -1,0 +1,120 @@
+/* ASIDE.CSS */
+.aside {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-bottom: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  gap: var(--spacing-md);
+}
+
+/* Common section styling */
+.aside section {
+  background: var(--cream);
+  border-radius: var(--neu-radius);
+  padding: var(--neu-padding);
+  margin-bottom: var(--spacing-sm);
+}
+
+.aside h2 {
+  font-family: var(--font-accent);
+  color: var(--brown);
+  font-size: var(--text-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Mini calendar specific styles */
+.mini-calendar {
+  font-size: var(--text-xs);
+  background: var(--cream);
+  border: none;
+  /* box-shadow: inset var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    inset calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light); */
+}
+
+/* Goals tracker styling */
+.goals-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Quick add form styling */
+.quick-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Inspiration quote styling */
+.daily-quote {
+  font-style: italic;
+  color: var(--brown);
+  padding: var(--spacing-sm);
+  border-left: 3px solid var(--orange);
+}
+
+/* Today's events section */
+.aside-today {
+  padding: var(--spacing-md);
+  background-color: var(--cream);
+  border-radius: 4px;
+  margin-bottom: var(--spacing-md);
+}
+
+.today-events {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Add these styles to aside.css */
+
+.event-list-item .edit-event {
+  background: var(--cream);
+  border: 1px solid var(--gray);
+  color: var(--brown);
+}
+
+.event-list-item .delete-event {
+  background: #f44336;
+  border: none;
+  color: white;
+}
+
+.event-filters {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-md);
+}
+.event-filter-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--neu-radius);
+  background: var(--cream);
+  border: none;
+  color: var(--brown);
+  cursor: pointer;
+  font-weight: bold;
+  /* Popped out effect */
+  box-shadow: var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+/* Active state - pushed in look */
+.event-filter-btn.active {
+  box-shadow: inset var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    inset calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
+  transform: scale(0.95);
+}
+
+/* Hover state */
+.event-filter-btn:hover:not(.active) {
+  transform: translateY(-2px);
+}

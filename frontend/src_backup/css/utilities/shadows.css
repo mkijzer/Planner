@@ -1,0 +1,14 @@
+/* Reusable shadow mixins */
+.neu-inset {
+  box-shadow: inset var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    inset calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
+}
+
+.neu-outset {
+  box-shadow: var(--neu-distance) var(--neu-distance)
+      calc(var(--neu-distance) * 2) var(--shadow-dark),
+    calc(var(--neu-distance) * -1) calc(var(--neu-distance) * -1)
+      calc(var(--neu-distance) * 2) var(--shadow-light);
+}
