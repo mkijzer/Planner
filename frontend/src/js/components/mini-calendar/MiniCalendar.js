@@ -25,6 +25,18 @@ export class MiniCalendar extends Component {
     }
   }
 
+  // Add method to get events for a specific date
+  getEventsForDate(date) {
+    return this.state.events.filter((event) => {
+      const eventDate = new Date(event.date);
+      return (
+        eventDate.getDate() === date.getDate() &&
+        eventDate.getMonth() === date.getMonth() &&
+        eventDate.getFullYear() === date.getFullYear()
+      );
+    });
+  }
+
   // Add method to check if date has events
   hasEvents(date) {
     return this.state.events.some((event) => {

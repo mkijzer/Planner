@@ -1,7 +1,6 @@
 /* TASKMODAL.CSS */
 
-/* Modal Structure
-   ========================================================================== */
+/* Modal Structure */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -9,14 +8,14 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.1);
-  display: flex; /* Always flex, we will hide with opacity instead */
+  display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
   backdrop-filter: blur(0px);
   opacity: 0;
   transition: opacity 0.4s ease-in-out, backdrop-filter 0.4s ease-in-out;
-  pointer-events: none; /* Prevents clicks when invisible */
+  pointer-events: none;
 }
 
 .modal-overlay.show {
@@ -26,7 +25,7 @@
 }
 
 .modal-overlay.show .modal-content {
-  transform: scale(1); /* Grow to normal size */
+  transform: scale(1);
   opacity: 1;
 }
 
@@ -36,14 +35,13 @@
   border-radius: var(--neu-radius);
   max-width: 500px;
   width: 90%;
-  position: relative;
   max-height: 90vh;
   overflow-y: auto;
-  /* box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1),
-    -5px -5px 10px rgba(255, 255, 255, 0.5); */
   transform: scale(0.8);
   opacity: 0;
   transition: transform 0.4s ease-out, opacity 0.3s ease-out;
+  box-shadow: 5px 5px 10px var(--shadow-dark),
+    -5px -5px 10px var(--shadow-light);
 }
 
 .modal-overlay.show .modal-content {
@@ -53,23 +51,21 @@
 
 .modal-close {
   position: absolute;
-  top: var(--spacing-lg);
-  right: var(--spacing-lg);
+  top: var(--spacing-md); /* Better positioning, top-middle */
+  right: var(--spacing-md);
   font-size: var(--text-xl);
-  color: var(--orange);
+  color: var(--text-light); /* Lighter text */
   cursor: pointer;
-  /* Make it round */
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  /* Center the X */
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Pop-out effect */
   box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
   transition: all 0.2s ease;
 }
+
 .modal-close:hover {
   box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
 }
@@ -79,27 +75,24 @@
     inset -2px -2px 4px var(--shadow-light);
 }
 
-/* Form Layout
-     ========================================================================== */
+/* Form Layout */
 #event-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-md); /* Better spacing */
 }
 
+/* Form Elements */
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-sm); /* Better spacing */
 }
 
-/* Form Elements
-     ========================================================================== */
 .form-group label {
   font-weight: 700;
-  color: var(--text-dark);
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5),
-    -1px -1px 1px rgba(0, 0, 0, 0.1);
+  color: var(--text-light); /* Lighter text */
+  text-shadow: 1px 1px 1px var(--shadow-light), -1px -1px 1px var(--shadow-dark);
 }
 
 .form-group input,
@@ -110,18 +103,14 @@
   border: none;
   border-radius: var(--neu-radius);
   background: var(--cream);
-  /* Inset shadow effect */
   box-shadow: inset 2px 2px 4px var(--shadow-dark),
     inset -2px -2px 4px var(--shadow-light);
-  /* Text style for depth */
-  color: var(--text-dark);
+  color: var(--text-light); /* Lighter text */
   text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
     0.5px 0.5px 0.5px var(--shadow-dark);
-  /* Smooth transition */
   transition: all 0.2s ease;
 }
 
-/* Focus state */
 .form-group input:focus,
 .form-group textarea:focus,
 .event-notes:focus {
@@ -130,8 +119,7 @@
     inset -3px -3px 6px var(--shadow-light);
 }
 
-/* Button Styles
-     ========================================================================== */
+/* Button Styles */
 .btn-submit,
 .priority-btn,
 .reminder-btn {
@@ -140,12 +128,10 @@
   background: var(--cream);
   border-radius: var(--neu-radius);
   cursor: pointer;
-  /* More subtle text depth effect */
-  color: var(--text-dark);
+  color: var(--text-light); /* Lighter text */
   text-shadow: 0.5px 0.5px 0.5px var(--shadow-light),
     -0.5px -0.5px 0.5px var(--shadow-dark);
   font-weight: bold;
-  /* Button pop effect */
   box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
   transition: all 0.2s ease;
 }
@@ -156,19 +142,16 @@
   box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
 }
 
-/* Subtle inset text when pressed/selected */
 .btn-submit:active,
 .priority-btn.selected,
 .reminder-btn.selected {
   box-shadow: inset 4px 4px 8px var(--shadow-dark),
     inset -4px -4px 8px var(--shadow-light);
-  /* Reduced shadow values for more delicate inlay */
   text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
     0.5px 0.5px 0.5px var(--shadow-dark);
 }
 
-/* Priority Button States
-     ========================================================================== */
+/* Priority Button States */
 .priority-btn[data-priority="low"].selected {
   color: #4caf50;
 }
@@ -181,14 +164,12 @@
   color: #f44336;
 }
 
-/* Reminder Button States
-     ========================================================================== */
+/* Reminder Button States */
 .reminder-btn.selected {
   color: var(--orange);
 }
 
-/* Tag System
-     ========================================================================== */
+/* Tag System */
 .tag-container {
   display: flex;
   flex-direction: column;
@@ -203,17 +184,15 @@
 
 .tag {
   background: var(--cream);
-  color: var(--text-dark);
+  color: var(--text-light); /* Lighter text */
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 12px;
   display: flex;
   align-items: center;
   gap: 4px;
-  /* Add inset effect for selected tags */
   box-shadow: inset 2px 2px 4px var(--shadow-dark),
     inset -2px -2px 4px var(--shadow-light);
-  /* Text depth */
   text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
     0.5px 0.5px 0.5px var(--shadow-dark);
 }
@@ -222,7 +201,6 @@
   cursor: pointer;
   padding: 2px 4px;
   border-radius: 50%;
-  /* Make the X slightly pop out */
   box-shadow: 1px 1px 2px var(--shadow-dark), -1px -1px 2px var(--shadow-light);
 }
 
@@ -231,32 +209,17 @@
     inset -1px -1px 2px var(--shadow-light);
 }
 
-/* Event Actions
-     ========================================================================== */
+/* Event Actions */
 .event-actions {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.edit-event,
-.delete-event {
-  padding: 4px 8px;
-  border-radius: var(--neu-radius);
-  cursor: pointer;
-}
-
-.delete-event {
-  background: #f44336;
-  color: var(--orange);
-  border: none;
+  gap: var(--spacing-md); /* Better spacing */
+  margin-bottom: var(--spacing-lg);
 }
 
 .edit-event,
 .delete-event {
   padding: var(--spacing-sm) var(--spacing-md);
   border: none;
-  background: var(--cream);
   border-radius: var(--neu-radius);
   cursor: pointer;
   font-weight: bold;
@@ -265,11 +228,13 @@
 }
 
 .edit-event {
-  color: var(--text-dark);
+  background: var(--cream);
+  color: var(--text-light); /* Lighter text */
 }
 
 .delete-event {
-  color: var(--orange);
+  background: #f44336;
+  color: var(--text-light); /* Lighter text */
 }
 
 .edit-event:hover,
@@ -277,13 +242,12 @@
   box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
 }
 
-/* Utility Classes
-     ========================================================================== */
+/* Utility Classes */
 .hidden {
   display: none;
 }
 
-/* Dropdown menu styling */
+/* Dropdown and Tag Styling */
 .tag-container datalist,
 .tag-container select,
 .tag-container input[list] + div {
@@ -294,20 +258,17 @@
     inset -2px -2px 4px var(--shadow-light);
 }
 
-/* Individual dropdown options */
 .tag-container option,
 .tag-container input[list] + div > div {
-  padding: 8px 12px;
-  color: var(--brown);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--text-light); /* Lighter text */
   border-radius: var(--neu-radius);
-  margin: 2px 0;
+  margin: var(--spacing-xs) 0;
   cursor: pointer;
-  /* Text depth effect */
   text-shadow: -0.5px -0.5px 0.5px var(--shadow-light),
     0.5px 0.5px 0.5px var(--shadow-dark);
 }
 
-/* Hover state for options */
 .tag-container option:hover,
 .tag-container input[list] + div > div:hover {
   background: var(--gray);
@@ -319,24 +280,19 @@
   margin-bottom: var(--spacing-lg);
 }
 
-.event-details {
-  margin-bottom: var(--spacing-lg);
-}
-
 .event-details .form-group {
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .event-details h3 {
-  color: var(--text-dark);
+  color: var(--text-light); /* Lighter text */
   font-size: var(--text-base);
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 .detail-value {
-  display: block;
-  color: var(--text-dark);
+  color: var(--text-light); /* Lighter text */
   font-size: var(--text-base);
 }
 
@@ -345,15 +301,5 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 3rem;
-}
-
-.event-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-/* Remove bullet from event list */
-.event-list-item {
-  list-style: none;
+  margin-top: var(--spacing-lg);
 }
