@@ -11,11 +11,11 @@ export class CalendarHeader extends Component {
   }
 
   setState(newState) {
-    super.setState(newState);
     if (newState.currentWeekStart) {
       this.currentWeekStart = new Date(newState.currentWeekStart);
-      this.render();
+      this.state.currentWeekStart = this.currentWeekStart;
     }
+    this.render(); // Make sure render is called after state update
   }
 
   render() {
@@ -34,7 +34,7 @@ export class CalendarHeader extends Component {
         {
           month: "long",
           day: "numeric",
-        }
+        },
       )} - ${weekEnd.toLocaleDateString(undefined, {
         month: "long",
         day: "numeric",
@@ -48,22 +48,36 @@ export class CalendarHeader extends Component {
     const nextButton = this.container.querySelector(".month-nav-next");
 
     prevButton?.addEventListener("click", () => {
+      // Go back exactly 7 days
       const newDate = new Date(this.currentWeekStart);
       newDate.setDate(newDate.getDate() - 7);
+
+      // Update local state first
+      this.currentWeekStart = newDate;
+      this.setState({ currentWeekStart: newDate });
+
+      // Dispatch event to notify other components
       document.dispatchEvent(
         new CustomEvent("weekChange", {
           detail: { date: newDate },
-        })
+        }),
       );
     });
 
     nextButton?.addEventListener("click", () => {
+      // Go forward exactly 7 days
       const newDate = new Date(this.currentWeekStart);
       newDate.setDate(newDate.getDate() + 7);
+
+      // Update local state first
+      this.currentWeekStart = newDate;
+      this.setState({ currentWeekStart: newDate });
+
+      // Dispatch event to notify other components
       document.dispatchEvent(
         new CustomEvent("weekChange", {
           detail: { date: newDate },
-        })
+        }),
       );
     });
   }

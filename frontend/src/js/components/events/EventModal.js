@@ -166,7 +166,7 @@ export class EventModal {
     }
     if (this.eventTimeEl) {
       this.eventTimeEl.textContent = formatTime(
-        new Date().setHours(hour, 0, 0)
+        new Date().setHours(hour, 0, 0),
       );
     }
 
@@ -191,17 +191,36 @@ export class EventModal {
       this.eventNotes.textContent = event.notes || "No notes added";
     }
 
-    // Setup edit/delete buttons
+    // FIXED: Remove old listeners by cloning buttons
     const editBtn = this.modal.querySelector(".edit-btn");
     const deleteBtn = this.modal.querySelector(".delete-btn");
 
-    editBtn?.addEventListener("click", () => this.openEditForm(event));
-    deleteBtn?.addEventListener("click", () => {
-      if (confirm("Are you sure you want to delete this event?")) {
-        this.eventManager.deleteEvent(event.id);
-        this.closeModal();
-      }
-    });
+    // Remove existing listeners by cloning the buttons
+    if (editBtn) {
+      const newEditBtn = editBtn.cloneNode(true);
+      editBtn.parentNode.replaceChild(newEditBtn, editBtn);
+
+      // Add single event listener to new button
+      newEditBtn.addEventListener("click", () => this.openEditForm(event));
+    }
+
+    if (deleteBtn) {
+      const newDeleteBtn = deleteBtn.cloneNode(true);
+      deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
+
+      // Add single event listener to new button
+      newDeleteBtn.addEventListener("click", async () => {
+        if (confirm("Are you sure you want to delete this event?")) {
+          try {
+            await this.eventManager.deleteEvent(event.id);
+            this.closeModal();
+          } catch (error) {
+            console.error("Error deleting event:", error);
+            alert("Failed to delete event. Please try again.");
+          }
+        }
+      });
+    }
 
     this.showEventDetails();
     this.showModal();
@@ -271,7 +290,7 @@ export class EventModal {
       reminder: document.querySelector(".reminder-btn.selected")?.dataset.time,
       notes: document.getElementById("eventNotes").value,
       tags: Array.from(document.querySelectorAll(".tag")).map(
-        (tag) => tag.dataset.value
+        (tag) => tag.dataset.value,
       ),
     };
 
@@ -306,7 +325,7 @@ export class EventModal {
       reminder: document.querySelector(".reminder-btn.selected")?.dataset.time,
       notes: document.getElementById("eventNotes").value,
       tags: Array.from(document.querySelectorAll(".tag")).map(
-        (tag) => tag.dataset.value
+        (tag) => tag.dataset.value,
       ),
     };
 
@@ -321,7 +340,7 @@ export class EventModal {
     const options = { year: "numeric", month: "long", day: "numeric" };
     const formattedDate = new Date(date).toLocaleDateString(
       userLocale,
-      options
+      options,
     );
 
     const weekday = new Date(date).toLocaleDateString(userLocale, {

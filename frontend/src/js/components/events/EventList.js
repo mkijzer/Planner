@@ -72,7 +72,7 @@ export class EventList extends Component {
   async loadEvents() {
     try {
       const getAllEvents = this.eventService.getAllEvents.bind(
-        this.eventService
+        this.eventService,
       );
       const events = await getAllEvents();
 
@@ -96,30 +96,40 @@ export class EventList extends Component {
 
   filterEvents(events) {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Set to start of today for proper comparison
+    const startOfToday = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const endOfToday = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      23,
+      59,
+      59,
+    );
 
     switch (this.state.filter) {
       case "today":
         return events.filter((event) => {
           const eventDate = new Date(event.date);
-          return (
-            eventDate.getDate() === today.getDate() &&
-            eventDate.getMonth() === today.getMonth() &&
-            eventDate.getFullYear() === today.getFullYear()
-          );
+          // Check if event falls within today
+          return eventDate >= startOfToday && eventDate <= endOfToday;
         });
 
       case "upcoming":
         return events.filter((event) => {
           const eventDate = new Date(event.date);
-          return eventDate > today;
+          // Events after today
+          return eventDate > endOfToday;
         });
 
       default:
         return events;
     }
   }
-
   // 3. Rendering Methods
   render() {
     const filteredEvents = this.filterEvents(this.state.events);
@@ -164,7 +174,7 @@ export class EventList extends Component {
 
     eventElement.addEventListener("click", () => {
       document.dispatchEvent(
-        new CustomEvent("openEventDetails", { detail: { event } })
+        new CustomEvent("openEventDetails", { detail: { event } }),
       );
     });
 
