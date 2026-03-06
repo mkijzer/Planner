@@ -5,9 +5,11 @@
   padding-top: var(--spacing-md);
   font-size: var(--text-sm);
   width: 100%;
-  max-width: 290px;
+
   /* Match Today's Tasks shadow */
-  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+  box-shadow:
+    2px 2px 4px var(--shadow-dark),
+    -2px -2px 4px var(--shadow-light);
 }
 
 .mini-calendar-header {
@@ -59,14 +61,17 @@
   padding: 4px;
   border-radius: 4px;
   /* Add subtle inset effect to text */
-  text-shadow: 1px 1px 1px var(--shadow-light), -1px -1px 1px var(--shadow-dark);
+  text-shadow:
+    1px 1px 1px var(--shadow-light),
+    -1px -1px 1px var(--shadow-dark);
 }
 
 .mini-calendar-day:hover {
   background: none;
   border-radius: 25%;
   /* Add pressed/stamped in effect on hover */
-  box-shadow: inset 2px 2px 4px var(--shadow-dark),
+  box-shadow:
+    inset 2px 2px 4px var(--shadow-dark),
     inset -2px -2px 4px var(--shadow-light);
   /* Deepen text shadow for more depth */
   text-shadow: 1px 1px 2px var(--shadow-dark);
@@ -90,14 +95,18 @@
   border-radius: 50%;
   z-index: -1;
   /* Add floating effect */
-  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+  box-shadow:
+    2px 2px 4px var(--shadow-dark),
+    -2px -2px 4px var(--shadow-light);
   background: transparent;
   animation: drawCircle 0.6s ease-out;
 }
 
 /* Adjust hover state for today's date */
 .mini-calendar-day.today:hover::before {
-  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+  box-shadow:
+    3px 3px 6px var(--shadow-dark),
+    -3px -3px 6px var(--shadow-light);
 }
 /* Simple selected state */
 .mini-calendar-day.selected:not(.today) {
@@ -153,4 +162,16 @@
   height: 4px;
   border-radius: 50%;
   background-color: var(--orange);
+}
+
+.event-dot-high {
+  background-color: #ff4444;
+}
+
+.event-dot-medium {
+  background-color: #ffa500;
+}
+
+.event-dot-low {
+  background-color: #4caf50;
 }

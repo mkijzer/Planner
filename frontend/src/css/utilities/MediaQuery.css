@@ -1,0 +1,155 @@
+@media screen and (max-width: 768px) {
+  /* Reset body and html for full-screen mobile view */
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--cream);
+  }
+
+  /* Hide header completely on mobile */
+  /* Keep header visible but hide navigation */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  /* Hide navigation links on mobile */
+  .header-nav a {
+    display: none;
+  }
+
+  /* Keep theme dots visible */
+  .theme-dots {
+    display: flex;
+  }
+
+  /* Hide main calendar container completely */
+  .main {
+    display: none;
+  }
+
+  /* Override main-grid to use full viewport */
+  .main-grid {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 10px;
+    gap: 10px;
+    background-color: var(--cream);
+    box-sizing: border-box;
+  }
+
+  /* Show aside as full-height flex container */
+  .aside {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Mini calendar takes fixed height */
+  .mini-calendar {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    box-sizing: border-box;
+    background-color: var(--cream);
+    box-shadow:
+      6px 6px 12px var(--shadow-dark),
+      -6px -6px 12px var(--shadow-light);
+    border-radius: var(--neu-radius);
+  }
+
+  /* Events section takes remaining space */
+  .aside-today {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: var(--cream);
+    box-shadow:
+      6px 6px 12px var(--shadow-dark),
+      -6px -6px 12px var(--shadow-light);
+    border-radius: var(--neu-radius);
+    overflow: hidden;
+  }
+
+  /* Hide the "Today's Events" title */
+  .aside-today h2 {
+    display: none;
+  }
+
+  /* Event filters stay at top */
+  .event-filters {
+    flex-shrink: 0;
+    margin-bottom: 10px;
+  }
+
+  /* Events list takes remaining space and scrolls */
+  .today-events {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  /* Mobile calendar styling */
+  .mini-calendar-header {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .mini-calendar-header button {
+    font-size: 1.1rem;
+    padding: 8px 12px;
+  }
+
+  .mini-calendar-days > div {
+    padding: 10px 6px;
+    font-size: 1rem;
+  }
+
+  .mini-calendar-day {
+    min-height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile event styling */
+  .sidebar-event-preview {
+    padding: 12px;
+    margin-bottom: 8px;
+    background-color: var(--cream);
+    border-radius: var(--neu-radius);
+    box-shadow:
+      3px 3px 6px var(--shadow-dark),
+      -3px -3px 6px var(--shadow-light);
+  }
+
+  .sidebar-event-preview h4 {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+  }
+
+  .sidebar-event-preview time {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  /* Filter buttons mobile styling */
+  .event-filter-btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}

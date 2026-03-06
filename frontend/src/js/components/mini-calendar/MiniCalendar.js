@@ -14,6 +14,11 @@ export class MiniCalendar extends Component {
     this.calendar = calendar;
     this.eventService = eventService; // Store eventService
     this.loadEvents(); // Load events when component is created
+
+    // Listen for event changes
+    this.eventService.addListener((events) => {
+      this.setState({ events: events });
+    });
   }
 
   async loadEvents() {
@@ -47,6 +52,30 @@ export class MiniCalendar extends Component {
         eventDate.getFullYear() === date.getFullYear()
       );
     });
+  }
+
+  // Get highest priority for a date
+  getHighestPriority(date) {
+    const events = this.getEventsForDate(date);
+    if (events.length === 0) return null;
+
+    const priorities = { high: 3, medium: 2, low: 1 };
+    let highest = events[0].priority || "low";
+
+    events.forEach((event) => {
+      const priority = event.priority || "low";
+      if (priorities[priority] > priorities[highest]) {
+        highest = priority;
+      }
+    });
+
+    return highest;
+  }
+
+  renderEventDots(date) {
+    const priority = this.getHighestPriority(date);
+    if (!priority) return "";
+    return `<span class="event-dot event-dot-${priority}"></span>`;
   }
 
   render() {
@@ -102,14 +131,14 @@ export class MiniCalendar extends Component {
       html += `
           <time 
               class="mini-calendar-day${isToday ? " today" : ""}${
-        isSelected ? " selected" : ""
-      }"
+                isSelected ? " selected" : ""
+              }"
               datetime="${date.toISOString().slice(0, 10)}"
               aria-label="${date.toLocaleDateString()}"
               data-date="${date.toISOString()}"
           >
               ${day}
-              ${hasEvents ? '<span class="event-dot"></span>' : ""}
+              ${hasEvents ? this.renderEventDots(date) : ""}
           </time>`;
     }
 
@@ -128,7 +157,7 @@ export class MiniCalendar extends Component {
     this.container.innerHTML = html;
 
     const todayElement = this.container.querySelector(
-      ".mini-calendar-day.today"
+      ".mini-calendar-day.today",
     );
     if (todayElement) {
       todayElement.classList.add("animate");

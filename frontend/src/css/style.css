@@ -15,3 +15,6 @@
 @import "components/EventModal.css";
 @import "components/mini-calendar.css";
 @import "components/event-list.css";
+
+/* Mobile responsive styles - must be last to override */
+@import "utilities/MediaQuery.css";
